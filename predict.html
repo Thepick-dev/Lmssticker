@@ -1,37 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>LMS 12 - Predict</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  body {margin:0; background:#0a0a1a; font-family:'Press Start 2P', cursive; color:#ffd60a;}
-  header {position:sticky; top:0; background:#11112a; padding:1rem 0; text-align:center; z-index:1000;}
-  nav {display:flex; justify-content:space-evenly; flex-wrap:nowrap; overflow-x:auto;}
-  nav a {color:#ffd60a; text-decoration:none; text-transform:uppercase; white-space:nowrap; font-size:14px; transition:0.3s;}
-  nav a:hover {color:#00ffff; text-shadow:0 0 10px #00ffff;}
-  h1 {font-size:48px; text-align:center; margin:1rem 0; color:#ffd60a; text-shadow:0 0 10px #ffd60a;}
-  .top-questions {display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin:1rem 0;}
-  .top-questions select, .top-questions input {padding:0.5rem; font-family:'Press Start 2P', cursive; font-size:10px; border:3px solid #00ffff; background:#11112a; color:#ffd60a; text-transform:uppercase;}
-  .player-nav {display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; margin:2rem 0 1rem 0;}
-  .player-nav button {padding:0.5rem; background:#ffcc00; border:3px solid #00ffff; color:#0a0a1a; font-family:'Press Start 2P', cursive; cursor:pointer; text-transform:uppercase; font-size:10px; box-shadow: 2px 2px 0 #000, inset 0 0 5px #ffffff;}
-  .player-nav button:hover {transform: scale(1.05);}
-  .players-container {display:flex; overflow-x:auto; scroll-behavior: smooth; gap:2rem; padding-bottom:2rem;}
-  .player-section {flex:0 0 90%; background:#1b1b3a; border:3px solid #00ffff; border-radius:8px; padding:1rem; min-width:300px; color:#ffd60a;}
-  .fixtures {display:flex; flex-direction:column; gap:0.5rem; margin:1rem 0;}
-  .fixture-row {display:flex; gap:0.5rem;}
-  .fixture-tile {flex:1; padding:0.5rem; background:#2a2a4c; border:2px solid #00ffff; border-radius:4px; text-align:center; font-size:10px; cursor:pointer; transition:0.2s;}
-  .fixture-tile.picked {background:#555555; color:#aaaaaa; border-color:#888888;}
-  .player-table {width:100%; border-collapse:collapse; margin-top:1rem; font-size:10px;}
-  .player-table th, .player-table td {border:1px solid #00ffff; padding:3px; text-align:center;}
-  .player-table th {background:#11112a; color:#00ffff;}
-  tr:nth-child(even) {background:#1b1b3a;}
-  tr:nth-child(odd) {background:#2a2a4c;}
+  :root{
+    --bg:#0a0a1a;
+    --panel:#1b1b3a;
+    --panel-2:#2a2a4c;
+    --neon:#00ffff;
+    --accent:#ffd60a;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);font-family:'Press Start 2P',cursive;color:var(--accent);-webkit-font-smoothing:antialiased}
+  header{
+    position:sticky;top:0;z-index:1000;
+    background:#11112a;padding:12px 0;text-align:center;
+    border-bottom:3px solid rgba(0,255,255,0.03);
+  }
+  nav{display:flex;justify-content:space-evenly;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding:0 8px}
+  nav a{color:var(--accent);text-decoration:none;text-transform:uppercase;font-size:14px;white-space:nowrap;transition:0.22s}
+  nav a:hover{color:var(--neon);text-shadow:0 0 10px var(--neon)}
+  h1{font-size:48px;margin:14px 0;color:var(--accent);text-align:center;text-shadow:0 0 10px var(--accent)}
+  .top-questions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:6px 12px}
+  .top-questions select,.top-questions input{
+    padding:8px 10px;font-size:11px;background:#11112a;border:3px solid var(--neon);color:var(--accent);
+    text-transform:uppercase;font-family:'Press Start 2P';min-width:140px;
+  }
+  .submit-row{display:flex;justify-content:center;padding:12px}
+  .submit-btn{
+    padding:10px 18px;background:#ffcc00;color:#0a0a1a;border:3px solid var(--neon);
+    font-family:'Press Start 2P';text-transform:uppercase;font-size:12px;cursor:pointer;
+    box-shadow:2px 2px 0 #000, inset 0 0 6px #fff;transition:transform .15s,box-shadow .15s;
+  }
+  .submit-btn:hover{transform:scale(1.05)}
+
+  /* Player nav: two rows of 4 */
+  .player-nav {
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:8px;
+    padding:12px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .player-btn{
+    padding:8px 6px;background:#11112a;color:var(--accent);border:3px solid var(--neon);
+    font-family:'Press Start 2P';font-size:11px;text-transform:uppercase;cursor:pointer;
+    box-shadow:2px 2px 0 #000; text-align:center;
+  }
+  .player-btn:hover{transform:scale(1.02)}
+  /* active classes per player (unique neon-ish colours) */
+  .player-btn.active-Bill{background:#ffd60a;color:#0a0a1a;border-color:#ffd60a}
+  .player-btn.active-Crosbo{background:#00ffff;color:#0a0a1a;border-color:#00ffff}
+  .player-btn.active-Ingz{background:#ff4da6;color:#0a0a1a;border-color:#ff4da6}
+  .player-btn.active-Kabz{background:#7cfc00;color:#0a0a1a;border-color:#7cfc00}
+  .player-btn.active-Kit{background:#ff8c00;color:#0a0a1a;border-color:#ff8c00}
+  .player-btn.active-Locky{background:#8a2be2;color:#0a0a1a;border-color:#8a2be2}
+  .player-btn.active-Stoobs{background:#00bfff;color:#0a0a1a;border-color:#00bfff}
+  .player-btn.active-T-City{background:#ff0066;color:#0a0a1a;border-color:#ff0066}
+
+  /* players container (horizontal scroll of full-width panels) */
+  .players-container{display:flex;gap:20px;overflow-x:auto;scroll-behavior:smooth;padding:20px}
+  .player-section{
+    flex:0 0 92%;min-width:320px;
+    background:var(--panel);border:3px solid var(--neon);border-radius:10px;padding:14px;
+    color:var(--accent);
+  }
+  .player-section h2{margin:0 0 8px 0;font-size:18px}
+  .player-section h3{margin:8px 0;font-size:12px}
+
+  /* fixtures: each row has two tiles - one tile per team */
+  .fixtures{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+  .fixture-row{display:flex;gap:8px}
+  .fixture-tile{
+    flex:1;padding:8px;font-size:11px;background:var(--panel-2);border:2px solid var(--neon);
+    border-radius:6px;text-align:center;cursor:pointer;transition:background .12s, transform .12s;
+  }
+  .fixture-tile:hover{transform:translateY(-3px)}
+  .fixture-tile.picked{background:#555;color:#aaaa;border-color:#888}
+
+  /* player table compact */
+  .player-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:10px}
+  .player-table th,.player-table td{border:1px solid var(--neon);padding:6px;text-align:center}
+  .player-table th{background:#11112a;color:var(--neon);font-size:10px}
+  .player-table tr:nth-child(even){background:#1b1b3a}
+  .player-table tr:nth-child(odd){background:#2a2a4c}
+
+  /* responsive tweaks */
+  @media (max-width:720px){
+    h1{font-size:36px}
+    .player-section{flex:0 0 94%}
+    .top-questions select{min-width:120px}
+    .player-nav{grid-template-columns:repeat(4,1fr);gap:6px;padding:10px}
+    .fixture-tile{font-size:10px;padding:6px}
+  }
 </style>
 </head>
 <body>
-
 <header>
   <nav>
     <a href="index.html">Home</a>
@@ -43,8 +110,9 @@
 
 <h1>LMS 12</h1>
 
+<!-- Top form to submit to Google Sheet -->
 <div class="top-questions">
-  <select>
+  <select id="playerSelect">
     <option disabled selected>Select Player</option>
     <option>Bill</option>
     <option>Crosbo</option>
@@ -56,7 +124,7 @@
     <option>T-City</option>
   </select>
 
-  <select>
+  <select id="teamSelect">
     <option disabled selected>Select Team</option>
     <option>Arsenal</option>
     <option>Aston Villa</option>
@@ -80,23 +148,38 @@
     <option>Wolves</option>
   </select>
 
-  <input type="text" placeholder="Player Name">
+  <input id="playerPick" type="text" placeholder="Player Name">
+  <input id="weekInput" type="number" placeholder="Week Number" min="1" max="17" style="width:110px">
 </div>
 
-<div class="player-nav">
-  <button onclick="scrollToPlayer(0)">Bill</button>
-  <button onclick="scrollToPlayer(1)">Crosbo</button>
-  <button onclick="scrollToPlayer(2)">Ingz</button>
-  <button onclick="scrollToPlayer(3)">Kabz</button>
-  <button onclick="scrollToPlayer(4)">Kit</button>
-  <button onclick="scrollToPlayer(5)">Locky</button>
-  <button onclick="scrollToPlayer(6)">Stoobs</button>
-  <button onclick="scrollToPlayer(7)">T-City</button>
+<div class="submit-row">
+  <button class="submit-btn" id="submitPickBtn">Submit Pick</button>
 </div>
 
-<div class="players-container" id="playersContainer"></div>
+<!-- Player navigation (2 rows of 4 due to grid layout) -->
+<div class="player-nav" id="playerNav">
+  <button class="player-btn" data-player="Bill">Bill</button>
+  <button class="player-btn" data-player="Crosbo">Crosbo</button>
+  <button class="player-btn" data-player="Ingz">Ingz</button>
+  <button class="player-btn" data-player="Kabz">Kabz</button>
+  <button class="player-btn" data-player="Kit">Kit</button>
+  <button class="player-btn" data-player="Locky">Locky</button>
+  <button class="player-btn" data-player="Stoobs">Stoobs</button>
+  <button class="player-btn" data-player="T-City">T-City</button>
+</div>
+
+<!-- Players container: horizontal scroll of player panels -->
+<div class="players-container" id="playersContainer">
+  <!-- JavaScript will generate the 8 player sections here -->
+</div>
 
 <script>
+/* --------------------------
+   Configuration & constants
+   -------------------------- */
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxrbFjCbLFFUpaMkvvwamK9-G-YXDu1WjutP-dZ_9b5X8Sa0RXThyeoYEcXLvRcG92G/exec";
+
+/* players and fixtures (strict mode values) */
 const playerNames = ["Bill","Crosbo","Ingz","Kabz","Kit","Locky","Stoobs","T-City"];
 const fixturesList = [
   ["Man Utd","Man City"],
@@ -111,47 +194,178 @@ const fixturesList = [
   ["Brighton","Bournemouth"]
 ];
 
-const container = document.getElementById('playersContainer');
+const playersContainer = document.getElementById('playersContainer');
+const playerNav = document.getElementById('playerNav');
 
-playerNames.forEach(player => {
-  const section = document.createElement('div');
-  section.className = 'player-section';
-  section.innerHTML = `<h2>${player}</h2><h3>Fixtures - Next Gameweek</h3>`;
+/* --------------------------
+   Build player sections
+   -------------------------- */
+function buildPlayerSections(){
+  playerNames.forEach(name=>{
+    const sec = document.createElement('section');
+    sec.className = 'player-section';
+    sec.id = name;
 
-  const fixturesDiv = document.createElement('div');
-  fixturesDiv.className = 'fixtures';
+    // Header
+    const title = document.createElement('h2'); title.textContent = name;
+    sec.appendChild(title);
+    sec.appendChild(Object.assign(document.createElement('h3'),{textContent:'Fixtures - Next Gameweek'}));
 
-  fixturesList.forEach(fix => {
-    const row = document.createElement('div');
-    row.className = 'fixture-row';
-    fix.forEach(team => {
-      const tile = document.createElement('div');
-      tile.className = 'fixture-tile';
-      tile.textContent = team;
-      tile.addEventListener('click', ()=> {tile.classList.toggle('picked');});
-      row.appendChild(tile);
+    // Fixtures
+    const fixturesDiv = document.createElement('div'); fixturesDiv.className='fixtures';
+    fixturesList.forEach(pair=>{
+      const row = document.createElement('div'); row.className='fixture-row';
+      pair.forEach(team=>{
+        const tile = document.createElement('div');
+        tile.className = 'fixture-tile';
+        tile.textContent = team;
+        // toggle picked for demonstration/future use
+        tile.addEventListener('click', ()=> {
+          tile.classList.toggle('picked');
+        });
+        row.appendChild(tile);
+      });
+      fixturesDiv.appendChild(row);
     });
-    fixturesDiv.appendChild(row);
+    sec.appendChild(fixturesDiv);
+
+    // Picked players placeholder
+    const pickedHeading = document.createElement('h3'); pickedHeading.textContent = 'YOU HAVE PICKED THESE PLAYERS — YOU ARE NOT PERMITTED TO PICK THEM AGAIN';
+    sec.appendChild(pickedHeading);
+    const pickedPara = document.createElement('p'); pickedPara.textContent = 'No players picked yet';
+    sec.appendChild(pickedPara);
+
+    // Player table (17 rows empty)
+    const table = document.createElement('table'); table.className='player-table';
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = `<th>Week</th><th>Team</th><th>Team Pts</th><th>Player Pick</th><th>Player Pts</th><th>Week Total</th>`;
+    table.appendChild(headerRow);
+    for(let i=1;i<=17;i++){
+      const r = document.createElement('tr');
+      r.innerHTML = `<td>${i}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>`;
+      table.appendChild(r);
+    }
+    sec.appendChild(table);
+
+    playersContainer.appendChild(sec);
+  });
+}
+
+/* --------------------------
+   Player nav interaction
+   -------------------------- */
+function initPlayerNav(){
+  const navButtons = Array.from(document.querySelectorAll('.player-btn'));
+  function clearActiveClasses(){
+    navButtons.forEach(b=>{
+      // remove all player specific active classes
+      playerNames.forEach(n=>b.classList.remove('active-'+n));
+      b.classList.remove('active');
+    });
+  }
+
+  navButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      // highlight
+      clearActiveClasses();
+      const player = btn.dataset.player;
+      btn.classList.add('active');
+      btn.classList.add('active-'+player);
+      // scroll to section top, accounting for header height
+      const section = document.getElementById(player);
+      if(section){
+        const headerHeight = document.querySelector('header').offsetHeight;
+        const rect = section.getBoundingClientRect();
+        const target = window.pageYOffset + rect.top - headerHeight - 8; // small gap
+        window.scrollTo({top: target, behavior:'smooth'});
+      }
+    });
   });
 
-  section.appendChild(fixturesDiv);
-  section.innerHTML += `<h3>You Have Picked These Players</h3><p>No players picked yet</p>`;
+  // IntersectionObserver: set active based on which section is near top
+  const options = {
+    root: null,
+    rootMargin: '-20% 0px -60% 0px', // tuned so section entering view triggers
+    threshold: 0
+  };
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        clearActiveClasses();
+        const btn = navButtons.find(b=>b.dataset.player===id);
+        if(btn){
+          btn.classList.add('active');
+          btn.classList.add('active-'+id);
+          // ensure button visible in nav (optional), scroll into view horizontally
+          btn.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+        }
+      }
+    });
+  }, options);
 
-  const table = document.createElement('table');
-  table.className = 'player-table';
-  table.innerHTML = `<tr>
-    <th>Week</th><th>Team</th><th>Team Pts</th><th>Player Pick</th><th>Player Pts</th><th>Week Total</th>
-  </tr>` + Array.from({length:17}, ()=>`<tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`).join('');
+  // observe each player section
+  playerNames.forEach(n=>{
+    const el = document.getElementById(n);
+    if(el) observer.observe(el);
+  });
+}
 
-  section.appendChild(table);
-  container.appendChild(section);
+/* --------------------------
+   Submit pick (to Google Sheet)
+   -------------------------- */
+async function submitPickToSheet(data){
+  try{
+    const res = await fetch(SHEET_URL, {
+      method:'POST',
+      body: JSON.stringify(data),
+      headers: {'Content-Type':'application/json'}
+    });
+    return await res.json();
+  }catch(err){
+    console.error('Submit error',err);
+    throw err;
+  }
+}
+
+document.getElementById('submitPickBtn').addEventListener('click', async ()=>{
+  const player = document.getElementById('playerSelect').value;
+  const team = document.getElementById('teamSelect').value;
+  const playerPick = document.getElementById('playerPick').value.trim();
+  const week = document.getElementById('weekInput').value;
+
+  if(!player || !team || !playerPick || !week){
+    alert('Please complete Player, Team, Player name and Week.');
+    return;
+  }
+
+  const payload = {week, player, team, playerPick};
+
+  try{
+    const result = await submitPickToSheet(payload);
+    if(result && result.status === 'success'){
+      alert('Pick submitted!');
+      // clear form
+      document.getElementById('playerSelect').value = '';
+      document.getElementById('teamSelect').value = '';
+      document.getElementById('playerPick').value = '';
+      document.getElementById('weekInput').value = '';
+    } else {
+      alert('Submission failed. See console for details.');
+      console.error(result);
+    }
+  } catch(e){
+    alert('Network / script error. Check console.');
+  }
 });
 
-function scrollToPlayer(index){
-  const sections = container.querySelectorAll('.player-section');
-  if(sections[index]) sections[index].scrollIntoView({behavior:'smooth', inline:'start'});
-}
-</script>
+/* --------------------------
+   Initialization
+   -------------------------- */
+buildPlayerSections();
+// Wait a tick so sections exist in DOM then init nav observer & handlers
+setTimeout(initPlayerNav, 120);
 
+</script>
 </body>
 </html>
