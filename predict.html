@@ -70,16 +70,14 @@
   }
 
   .player-nav {
-    display:flex;
-    overflow-x:auto;
-    gap:1rem;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:0.5rem;
     margin:2rem 0 1rem 0;
-    padding-bottom:0.5rem;
   }
 
   .player-nav button {
-    flex:0 0 auto;
-    padding:0.5rem 1rem;
+    padding:0.5rem;
     background:#ffcc00;
     border:3px solid #00ffff;
     color:#0a0a1a;
@@ -119,14 +117,27 @@
     margin:1rem 0;
   }
 
-  .fixture-tile {
+  .fixture-row {
     display:flex;
-    justify-content:space-between;
+    gap:0.5rem;
+  }
+
+  .fixture-tile {
+    flex:1;
     padding:0.5rem;
     background:#2a2a4c;
     border:2px solid #00ffff;
     border-radius:4px;
+    text-align:center;
     font-size:10px;
+    cursor:pointer;
+    transition:0.2s;
+  }
+
+  .fixture-tile.picked {
+    background:#555555;
+    color:#aaaaaa;
+    border-color:#888888;
   }
 
   .player-table {
@@ -182,6 +193,7 @@
     <option disabled selected>Select Team</option>
     <option>Arsenal</option>
     <option>Aston Villa</option>
+    <option>Brentford</option>
     <option>Bournemouth</option>
     <option>Brighton</option>
     <option>Burnley</option>
@@ -194,11 +206,11 @@
     <option>Man Utd</option>
     <option>Newcastle</option>
     <option>Nottingham Forest</option>
-    <option>Tottenham Hotspur</option>
+    <option>Palace</option>
     <option>Sunderland</option>
+    <option>Tottenham Hotspur</option>
     <option>West Ham</option>
     <option>Wolves</option>
-    <option>Brentford</option>
   </select>
 
   <input type="text" placeholder="Player Name">
@@ -216,79 +228,74 @@
   <button onclick="scrollToPlayer(7)">T-City</button>
 </div>
 
-<!-- Players sections -->
 <div class="players-container" id="playersContainer">
-  
-  <!-- Example Player Section: Bill -->
-  <div class="player-section">
-    <h2>Bill</h2>
-    <h3>Fixtures - Next Gameweek</h3>
-    <div class="fixtures">
-      <div class="fixture-tile">Man Utd v Man City</div>
-      <div class="fixture-tile">Chelsea v Brentford</div>
-      <div class="fixture-tile">Leeds v Fulham</div>
-      <div class="fixture-tile">Liverpool v Burnley</div>
-      <div class="fixture-tile">Sunderland v Palace</div>
-      <div class="fixture-tile">Tottenham Hotspur v West Ham</div>
-      <div class="fixture-tile">Nottingham Forest v Arsenal</div>
-      <div class="fixture-tile">Wolves v Newcastle</div>
-      <div class="fixture-tile">Aston Villa v Everton</div>
-      <div class="fixture-tile">Brighton v Bournemouth</div>
-    </div>
-
-    <h3>You Have Picked These Players</h3>
-    <p>No players picked yet</p>
-
-    <table class="player-table">
-      <tr>
-        <th>Week</th>
-        <th>Team Pick (Opp)</th>
-        <th>Team Pts</th>
-        <th>Player Pick</th>
-        <th>Player Pts</th>
-        <th>Week Total</th>
-      </tr>
-      <tr>
-        <td>1</td>
-        <td>Man Utd</td>
-        <td>60</td>
-        <td>Haaland</td>
-        <td>30</td>
-        <td>90</td>
-      </tr>
-      <!-- Empty rows for weeks 2–17 -->
-      <tr><td>2</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>3</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>4</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>5</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>6</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>7</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>8</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>9</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>10</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>11</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>12</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>13</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>14</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>15</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>16</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>17</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-    </table>
-  </div>
-
-  <!-- Repeat the same structure for the other 7 players (Crosbo, Ingz, Kabz, Kit, Locky, Stoobs, T-City) -->
-  <!-- You can duplicate the above div and change the name and dummy table data -->
-</div>
 
 <script>
-function scrollToPlayer(index) {
-  const container = document.getElementById('playersContainer');
+const playerNames = ["Bill","Crosbo","Ingz","Kabz","Kit","Locky","Stoobs","T-City"];
+const fixturesList = [
+  ["Man Utd","Man City"],
+  ["Chelsea","Brentford"],
+  ["Leeds","Fulham"],
+  ["Liverpool","Burnley"],
+  ["Sunderland","Palace"],
+  ["Tottenham Hotspur","West Ham"],
+  ["Nottingham Forest","Arsenal"],
+  ["Wolves","Newcastle"],
+  ["Aston Villa","Everton"],
+  ["Brighton","Bournemouth"]
+];
+
+const container = document.getElementById('playersContainer');
+
+playerNames.forEach(player => {
+  const section = document.createElement('div');
+  section.className = 'player-section';
+  section.innerHTML = `<h2>${player}</h2><h3>Fixtures - Next Gameweek</h3>`;
+
+  const fixturesDiv = document.createElement('div');
+  fixturesDiv.className = 'fixtures';
+
+  fixturesList.forEach(fix => {
+    const row = document.createElement('div');
+    row.className = 'fixture-row';
+    fix.forEach((team, idx) => {
+      const tile = document.createElement('div');
+      tile.className = 'fixture-tile';
+      tile.textContent = team;
+
+      // Example: grey out "Man City" tile as dummy example
+      if(player === "Bill" && team === "Man City") {
+        tile.classList.add('picked');
+      }
+
+      tile.addEventListener('click', ()=> {
+        tile.classList.toggle('picked');
+      });
+      row.appendChild(tile);
+    });
+    fixturesDiv.appendChild(row);
+  });
+
+  section.appendChild(fixturesDiv);
+  section.innerHTML += `<h3>You Have Picked These Players</h3><p>No players picked yet</p>`;
+
+  const table = document.createElement('table');
+  table.className = 'player-table';
+  table.innerHTML = `<tr>
+    <th>Week</th><th>Team</th><th>Team Pts</th><th>Player Pick</th><th>Player Pts</th><th>Week Total</th>
+  </tr>` + Array.from({length:17}, ()=>`<tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`).join('');
+
+  section.appendChild(table);
+  container.appendChild(section);
+});
+
+function scrollToPlayer(index){
   const sections = container.querySelectorAll('.player-section');
-  if(sections[index]) {
-    sections[index].scrollIntoView({behavior:'smooth', inline:'start'});
-  }
+  if(sections[index]) sections[index].scrollIntoView({behavior:'smooth', inline:'start'});
 }
 </script>
+
+</div>
 
 </body>
 </html>
