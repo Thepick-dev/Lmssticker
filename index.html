@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football League</title>
+<style>
+/* Global Styles */
+body {
+  margin:0;
+  font-family: 'Arial Black', sans-serif;
+  background: linear-gradient(135deg,#fff3e6,#ffd699);
+  color:#111;
+}
+nav {
+  background:#ff6f61;
+  padding:16px 32px;
+  display:flex;
+  justify-content:center;
+  gap:32px;
+  font-weight:bold;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+  position: sticky;
+  top:0;
+  z-index:100;
+}
+nav a {
+  color:#fff;
+  text-decoration:none;
+  font-size:20px;
+  padding:8px 16px;
+  border-radius:12px;
+  transition: all 0.3s;
+}
+nav a:hover {
+  background:#ff3c3c;
+  transform: scale(1.1);
+}
+
+/* Hero Section */
+.hero {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  height:80vh;
+  background: radial-gradient(circle at top left, #ffe066,#ff6f61);
+  border-bottom-left-radius:80px;
+  border-bottom-right-radius:80px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+.hero h1 {
+  font-size:72px;
+  color:#fff;
+  text-shadow: 5px 5px #ffb347;
+  margin:0 0 20px 0;
+}
+.hero p {
+  font-size:26px;
+  color:#fff;
+  max-width:800
