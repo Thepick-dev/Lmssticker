@@ -169,6 +169,8 @@ h1{font-size:48px;margin:14px 0;color:var(--accent);text-align:center;text-shado
 </div>
 
 <script>
+'use strict';
+
 const SHEET_URL = "https://api.sheetbest.com/sheets/8cb5d444-88c4-40de-b023-2cadfd96bff2";
 const playerNames = ["Bill","Crosbo","Ingz","Kabz","Kit","Locky","Stoobs","T-City"];
 const fixturesList = [
@@ -262,15 +264,34 @@ function initPlayerNav(){
   });
 }
 
+// --- STEP 4: FULL ERROR REPORTING ---
 async function submitPickToSheet(data){
-  return fetch(SHEET_URL,{
-    method:'POST',
-    body:JSON.stringify(data),
-    headers:{'Content-Type':'application/json'}
-  }).then(r=>r.json());
+  try {
+    const response = await fetch(SHEET_URL, {
+      method:'POST',
+      body: JSON.stringify(data),
+      headers: {'Content-Type':'application/json'}
+    });
+
+    const text = await response.text(); // always read raw text first
+    let json;
+    try {
+      json = JSON.parse(text);
+    } catch(err) {
+      throw new Error(`Non-JSON response from Sheet.best: ${text}`);
+    }
+
+    if(!response.ok){
+      throw new Error(`HTTP ${response.status}: ${JSON.stringify(json)}`);
+    }
+
+    return json;
+  } catch(err){
+    throw err; // bubble up to submit handler
+  }
 }
 
-document.getElementById('submitPickBtn').addEventListener('click',async()=>{
+document.getElementById('submitPickBtn').addEventListener('click', async ()=>{
   const player=document.getElementById('playerSelect').value;
   const team=document.getElementById('teamSelect').value;
   const playerPick=document.getElementById('playerPick').value.trim();
@@ -283,17 +304,14 @@ document.getElementById('submitPickBtn').addEventListener('click',async()=>{
   const payload={ Player: player, Team: team, PlayerPick: playerPick };
 
   try{
-    const result=await submitPickToSheet(payload);
-    if(result.status==="success"){
-      alert("Pick submitted!");
-      document.getElementById('playerSelect').value="";
-      document.getElementById('teamSelect').value="";
-      document.getElementById('playerPick').value="";
-    } else {
-      alert("Submission failed."); console.log(result);
-    }
-  }catch(e){
-    alert("Error submitting."); console.error(e);
+    const result = await submitPickToSheet(payload);
+    alert("Pick submitted!\nSheet.best response:\n" + JSON.stringify(result,null,2));
+    document.getElementById('playerSelect').value="";
+    document.getElementById('teamSelect').value="";
+    document.getElementById('playerPick').value="";
+  }catch(err){
+    alert("Submission error:\n" + err.message);
+    console.error("Submission error:", err);
   }
 });
 
