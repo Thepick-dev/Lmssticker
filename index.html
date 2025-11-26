@@ -3,153 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Football League</title>
+<title>Football Arcade League</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-/* Global Styles */
-body {
-  margin:0;
-  font-family: 'Arial Black', sans-serif;
-  background: linear-gradient(135deg,#fff3e6,#ffd699);
-  color:#111;
-}
-nav {
-  background:#ff6f61;
-  padding:16px 32px;
-  display:flex;
-  justify-content:center;
-  gap:32px;
-  font-weight:bold;
-  box-shadow: 0 6px 10px rgba(0,0,0,0.3);
-  position: sticky;
-  top:0;
-  z-index:100;
-}
-nav a {
-  color:#fff;
-  text-decoration:none;
-  font-size:20px;
-  padding:8px 16px;
-  border-radius:12px;
-  transition: all 0.3s;
-}
-nav a:hover {
-  background:#ff3c3c;
-  transform: scale(1.1);
-}
-
-/* Hero Section */
-.hero {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  height:80vh;
-  background: radial-gradient(circle at top left, #ffe066,#ff6f61);
-  border-bottom-left-radius:80px;
-  border-bottom-right-radius:80px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
-  position: relative;
-}
-.hero h1 {
-  font-size:72px;
-  color:#fff;
-  text-shadow: 5px 5px #ffb347;
-  margin:0 0 20px 0;
-}
-.hero p {
-  font-size:26px;
-  color:#fff;
-  max-width:800px;
-  margin-bottom:40px;
-  text-shadow:3px 3px #ffb347;
-}
-.hero .buttons {
-  display:flex;
-  gap:24px;
-  flex-wrap:wrap;
-}
-.hero .buttons a {
-  background:#ff6f61;
-  color:#fff;
-  padding:18px 32px;
-  border-radius:24px;
-  font-weight:bold;
-  font-size:20px;
-  text-decoration:none;
-  box-shadow: 5px 5px 12px rgba(0,0,0,0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.hero .buttons a:hover {
-  transform: translateY(-6px) rotate(-2deg);
-  box-shadow:8px 8px 14px rgba(0,0,0,0.4);
-}
-
-/* Sticker Cards Section */
-.stickers {
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:24px;
-  padding:40px 0;
-}
-.sticker {
-  width:140px;
-  height:180px;
-  background:#fff;
-  border:5px solid #ffb347;
-  border-radius:24px;
-  box-shadow: 6px 6px 14px rgba(0,0,0,0.3);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:32px;
-  font-weight:bold;
-  color:#ff6f61;
-  transition: transform 0.3s;
-}
-.sticker:hover {
-  transform: rotate(-8deg) scale(1.2);
-}
-
-/* Footer */
-footer {
-  text-align:center;
-  padding:24px 0;
-  font-size:16px;
-  color:#333;
-}
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Press Start 2P', monospace;
+    background: #0a0a1a;
+    color: #fff;
+  }
+  nav {
+    background: #14213d;
+    padding: 16px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  }
+  nav a {
+    color: #e5e5ff;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 14px;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  nav a:hover {
+    color: #ffd60a;
+    text-shadow: 0 0 8px #ffd60a;
+  }
+  .hero {
+    height: 75vh;
+    background: radial-gradient(circle at center, #2a2a4c, #0a0a1a);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+  }
+  .hero h1 {
+    font-size: 48px;
+    color: #ffd60a;
+    text-shadow: 2px 2px #1b1b3a;
+    margin: 0 0 20px 0;
+  }
+  .hero p {
+    font-size: 16px;
+    color: #c5c5ff;
+    margin-bottom: 40px;
+    max-width: 600px;
+  }
+  .buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .buttons a {
+    background: #3d3d6b;
+    color: #e5e5ff;
+    padding: 12px 24px;
+    border: 2px solid #ffc300;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .buttons a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px #ffd60a;
+  }
+  .stickers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    padding: 40px 0;
+  }
+  .sticker {
+    width: 140px;
+    height: 180px;
+    background: #1b1b3a;
+    border: 3px solid #ffc300;
+    border-radius: 8px;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e5e5ff;
+    font-size: 48px;
+    transition: transform 0.2s;
+  }
+  .sticker:hover {
+    transform: rotate(-8deg) scale(1.15);
+  }
+  footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 10px;
+    color: #777;
+  }
 </style>
 </head>
 <body>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="predict.html">PREDICT</a>
+    <a href="table.html">TABLE</a>
+    <a href="rules.html">RULES</a>
+  </nav>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="predict.html">Predict</a>
-  <a href="table.html">Table</a>
-  <a href="rules.html">Rules</a>
-</nav>
-
-<div class="hero">
-  <h1>Football League</h1>
-  <p>Welcome to the boldest, brightest fantasy football experience! Predict scores, track players, and climb the leaderboard!</p>
-  <div class="buttons">
-    <a href="predict.html">Predict Now</a>
-    <a href="table.html">View Table</a>
-    <a href="rules.html">See Rules</a>
+  <div class="hero">
+    <h1>FOOTBALL ARCADE LEAGUE</h1>
+    <p>Relive the golden era of 90s football games. Predict matches, track players, and fight for the top spot!</p>
+    <div class="buttons">
+      <a href="predict.html">PREDICT NOW</a>
+      <a href="table.html">VIEW TABLE</a>
+      <a href="rules.html">SEE RULES</a>
+    </div>
   </div>
-</div>
 
-<div class="stickers">
-  <div class="sticker">⚽</div>
-  <div class="sticker">🥅</div>
-  <div class="sticker">🥇</div>
-  <div class="sticker">🏆</div>
-  <div class="sticker">👟</div>
-  <div class="sticker">🎯</div>
-</div>
+  <div class="stickers">
+    <div class="sticker">⚽</div>
+    <div class="sticker">🥅</div>
+    <div class="sticker">👟</div>
+    <div class="sticker">🏆</div>
+    <div class="sticker">🎯</div>
+    <div class="sticker">🥇</div>
+  </div>
 
-<footer>© 2025 Football League. All rights reserved.</footer>
-
+  <footer>© 1995–2025 Football Arcade League</footer>
 </body>
 </html>
