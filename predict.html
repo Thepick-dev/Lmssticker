@@ -111,7 +111,7 @@
   .player-table td{max-width:1px}
 
   @media (max-width:720px){
-    h1{font-size:36px}
+    h1{font-size:48px}
     .player-section{flex:0 0 94%}
     .player-nav{grid-template-columns:repeat(4,1fr);gap:6px;padding:10px}
     .fixture-tile{font-size:10px;padding:6px}
@@ -169,7 +169,7 @@
 </div>
 
 <script>
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbw3qUBdG4Yz0552cmAE1CjQLo7rqysOx0UHrQ3CBlGgCKfokdiBSa_253GSSXat62og/exec";
+const SHEET_URL = "https://api.sheetbest.com/sheets/8cb5d444-88c4-40de-b023-2cadfd96bff2";
 const playerNames = ["Bill","Crosbo","Ingz","Kabz","Kit","Locky","Stoobs","T-City"];
 const fixturesList = [
   ["Man Utd","Man City"],["Chelsea","Brentford"],["Leeds","Fulham"],
@@ -264,6 +264,8 @@ function initPlayerNav(){
 }
 
 async function submitPickToSheet(data){
+  // add timestamp
+  data.timestamp = new Date().toISOString();
   return fetch(SHEET_URL,{
     method:'POST',
     body:JSON.stringify(data),
