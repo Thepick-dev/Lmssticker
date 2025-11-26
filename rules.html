@@ -3,113 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rules – Football Arcade League</title>
+<title>LMS 12 - Rules</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin:0;
-    font-family:'Press Start 2P', monospace;
-    background: #0a0a1a;
-    color: #fff;
-  }
-  nav {
-    background: #14213d;
-    padding: 16px 0;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  nav a {
-    color: #e5e5ff;
-    text-decoration: none;
-    margin: 0 20px;
-    font-size: 14px;
-    transition: color 0.2s, text-shadow 0.2s;
-  }
-  nav a:hover {
-    color: #ffd60a;
-    text-shadow: 0 0 8px #ffd60a;
-  }
-  h1 {
-    text-align: center;
-    margin: 24px 0 16px 0;
-    font-size: 28px;
-    color: #ffd60a;
-    text-shadow: 2px 2px #1b1b3a;
-  }
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 10px;
-    background: #1b1b3a;
-    border: 3px solid #ffc300;
-    border-radius: 8px;
-    box-shadow: 4px 4px 12px rgba(0,0,0,0.7);
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 16px;
-  }
-  th, td {
-    padding: 12px;
-    text-align: left;
-    font-size: 12px;
-    color: #e5e5ff;
-    border-bottom: 1px solid #264066;
-  }
-  th {
-    background: #264066;
-    color: #ffd60a;
-  }
-  button {
-    display: block;
-    margin: 0 auto;
-    background: #3d3d6b;
-    color: #e5e5ff;
-    border: 2px solid #ffd60a;
-    padding: 10px 20px;
-    font-size: 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 10px #ffd60a;
+  body {margin:0; background:#0a0a1a; font-family:'Press Start 2P', cursive; color:#ffd60a;}
+  header {position:sticky; top:0; background:#11112a; padding:1rem 0; text-align:center; z-index:1000;}
+  nav a {display:inline-block; margin:0 1rem; color:#ffd60a; text-decoration:none; text-transform:uppercase; transition:0.3s;}
+  nav a:hover {color:#00ffff; text-shadow:0 0 10px #00ffff;}
+  h1 {font-size:56px; text-align:center; margin:1rem 0; color:#ffd60a; text-shadow:0 0 10px #ffd60a;}
+  .content {width:90%; margin:2rem auto; font-size:12px; line-height:1.5;}
+  table {width:100%; border-collapse:collapse; margin-top:1rem; font-size:12px;}
+  th, td {border:1px solid #00ffff; padding:4px; text-align:center;}
+  th {background:#11112a; color:#00ffff;}
+  tr:nth-child(even) {background:#1b1b3a;}
+  tr:nth-child(odd) {background:#2a2a4c;}
+  button.copy-btn {margin-top:1rem; padding:0.5rem 1rem; border:2px solid #00ffff; color:#00ffff; background:#11112a; text-transform:uppercase; cursor:pointer; animation:flash 2s infinite;}
+  button.copy-btn:hover {color:#ffd60a; border-color:#ffd60a; text-shadow:0 0 10px #ffd60a;}
+  @keyframes flash {
+    0%,100% {box-shadow:0 0 5px #00ffff;}
+    50% {box-shadow:0 0 20px #00ffff;}
   }
 </style>
 </head>
 <body>
+<header>
   <nav>
-    <a href="index.html">HOME</a>
-    <a href="predict.html">PREDICT</a>
-    <a href="table.html">TABLE</a>
-    <a href="rules.html">RULES</a>
+    <a href="index.html">Home</a>
+    <a href="predict.html">Predict</a>
+    <a href="table.html">Table</a>
+    <a href="rules.html">Rules</a>
   </nav>
+</header>
+<h1>LMS 12</h1>
 
-  <h1>SCORING RULES</h1>
-  <div class="container">
-    <table>
-      <thead><tr><th>Rule</th><th>Points</th></tr></thead>
-      <tbody>
-        <tr><td>Player goal</td><td>30</td></tr>
-        <tr><td>Player assist</td><td>15</td></tr>
-        <tr><td>Home win vs same‑level team</td><td>60</td></tr>
-      </tbody>
-    </table>
-    <button onclick="copyCSV()">COPY RULES CSV</button>
-  </div>
+<div class="content">
+<p>At the start of each gameweek, pick a team you think will win and a player you think will score and assist. You can only pick each team and player once throughout the competition. Points are awarded based on your selected team’s result according to the table below.</p>
 
-  <script>
-    function copyCSV(){
-      const csv = "rule,label,points\n1,Player goal,30\n2,Player assist,15\n3,Home win vs same‑level team,60";
-      navigator.clipboard.writeText(csv);
-      alert("CSV copied to clipboard!");
-    }
-  </script>
+<p>The teams are split into quartiles based on league position at the start of the gameweek. Points reward bravery — away wins against higher quartile teams are worth more! Players score points for any goals and assists. Use Haaland wisely!</p>
+
+<p>The competition lasts until the end of the season. The player with the most points at the end wins. What constitutes a gameweek is at the organiser’s discretion.</p>
+
+<p><strong>BE BRAVE — COWARDICE WILL GET YOU NOWHERE!</strong></p>
+
+<table>
+<tr>
+  <th>Result/Venue</th><th>Q-Gap</th><th>Team Points</th>
+</tr>
+<tr><td>W/H</td><td>+3</td><td>90</td></tr>
+<tr><td>W/H</td><td>+2</td><td>80</td></tr>
+<tr><td>W/H</td><td>+1</td><td>70</td></tr>
+<tr><td>W/H</td><td>0</td><td>60</td></tr>
+<tr><td>W/H</td><td>-1</td><td>50</td></tr>
+<tr><td>W/H</td><td>-2</td><td>40</td></tr>
+<tr><td>W/H</td><td>-3</td><td>30</td></tr>
+<tr><td>W/A</td><td>+3</td><td>100</td></tr>
+<tr><td>W/A</td><td>+2</td><td>90</td></tr>
+<tr><td>W/A</td><td>+1</td><td>80</td></tr>
+<tr><td>W/A</td><td>0</td><td>70</td></tr>
+<tr><td>W/A</td><td>-1</td><td>60</td></tr>
+<tr><td>W/A</td><td>-2</td><td>50</td></tr>
+<tr><td>W/A</td><td>-3</td><td>40</td></tr>
+<tr><td>D/H</td><td>+3</td><td>36</td></tr>
+<tr><td>D/H</td><td>+2</td><td>32</td></tr>
+<tr><td>D/H</td><td>+1</td><td>28</td></tr>
+<tr><td>D/H</td><td>0</td><td>24</td></tr>
+<tr><td>D/H</td><td>-1</td><td>20</td></tr>
+<tr><td>D/H</td><td>-2</td><td>16</td></tr>
+<tr><td>D/H</td><td>-3</td><td>12</td></tr>
+<tr><td>D/A</td><td>+3</td><td>42</td></tr>
+<tr><td>D/A</td><td>+2</td><td>36</td></tr>
+<tr><td>D/A</td><td>+1</td><td>30</td></tr>
+<tr><td>D/A</td><td>0</td><td>24</td></tr>
+<tr><td>D/A</td><td>-1</td><td>18</td></tr>
+<tr><td>D/A</td><td>-2</td><td>12</td></tr>
+<tr><td>D/A</td><td>-3</td><td>6</td></tr>
+<tr><td colspan="2">Goal</td><td>30</td></tr>
+<tr><td colspan="2">Assist</td><td>15</td></tr>
+</table>
+
+<button class="copy-btn" onclick="navigator.clipboard.writeText(document.querySelector('table').outerHTML)">Copy CSV</button>
+</div>
+
 </body>
 </html>
