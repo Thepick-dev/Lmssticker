@@ -1,34 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>LMS 12 - Predict</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  body {margin:0; background:#0a0a1a; font-family:'Press Start 2P', cursive; color:#ffd60a;}
-  header {position:sticky; top:0; background:#11112a; padding:1rem 0; text-align:center; z-index:1000;}
-  nav {display:flex; justify-content:space-evenly; flex-wrap:wrap; overflow-x:auto;}
-  nav a {color:#ffd60a; text-decoration:none; text-transform:uppercase; white-space:nowrap; font-size:12px; transition:0.3s;}
-  nav a:hover {color:#00ffff; text-shadow:0 0 10px #00ffff;}
-  h1 {font-size:56px; text-align:center; margin:1rem 0; color:#ffd60a; text-shadow:0 0 10px #ffd60a;}
-  .question-box {width:90%; margin:1rem auto; display:flex; flex-direction:column; gap:0.5rem;}
-  select, input {font-family:'Press Start 2P', cursive; font-size:12px; padding:0.5rem; background:#11112a; color:#ffd60a; border:2px solid #00ffff; text-transform:uppercase;}
-  .player-buttons {display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; margin:1rem 0;}
-  .player-buttons button {padding:0.5rem 1rem; background:#11112a; color:#ffd60a; border:2px solid #00ffff; cursor:pointer; transition:0.3s; font-size:10px;}
-  .player-buttons button.active {background:#00ffff; color:#11112a;}
-  .player-section {display:none; padding:1rem; border:2px solid #00ffff; margin:1rem auto; width:95%; border-radius:8px;}
-  .player-section.active {display:block;}
-  .fixtures {display:flex; flex-direction:column; gap:0.5rem; margin:1rem 0;}
-  .fixture-row {display:flex; gap:0.5rem;}
-  .team-tile {flex:1; padding:0.5rem; background:#1b1b3a; text-align:center; border:2px solid #00ffff; cursor:pointer; transition:0.3s; border-radius:4px;}
-  .team-tile.selected {background:#555555; border-color:#777;}
-  table {width:100%; border-collapse:collapse; margin-top:1rem; font-size:10px;}
-  th, td {border:1px solid #00ffff; padding:4px; text-align:center;}
-  th {background:#11112a; color:#00ffff;}
-  tr:nth-child(even) {background:#1b1b3a;}
-  tr:nth-child(odd) {background:#2a2a4c;}
-  .submit-button {margin-top:1rem; padding:0.5rem; background:#00ffff; color:#11112a; border:2px solid #00ffff; font-family:'Press Start 2P', cursive; cursor:pointer;}
+  :root{
+    --bg:#0a0a1a;
+    --panel:#1b1b3a;
+    --panel-2:#2a2a4c;
+    --neon:#00ffff;
+    --accent:#ffd60a;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);font-family:'Press Start 2P',cursive;color:var(--accent);-webkit-font-smoothing:antialiased;box-sizing:border-box}
+  *,*::before,*::after{box-sizing:inherit}
+  header{
+    position:sticky;top:0;z-index:1000;
+    background:#11112a;padding:12px 0;text-align:center;
+    border-bottom:3px solid rgba(0,255,255,0.03);
+  }
+  nav{display:flex;justify-content:space-evenly;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding:0 8px}
+  nav a{color:var(--accent);text-decoration:none;text-transform:uppercase;font-size:14px;white-space:nowrap;transition:0.22s}
+  nav a:hover{color:var(--neon);text-shadow:0 0 10px var(--neon)}
+  h1{font-size:48px;margin:14px 0;color:var(--accent);text-align:center;text-shadow:0 0 10px var(--accent)}
+
+  .top-questions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:6px 12px}
+  .top-questions select,.top-questions input{
+    padding:8px 10px;font-size:11px;background:#11112a;border:3px solid var(--neon);color:var(--accent);
+    text-transform:uppercase;font-family:'Press Start 2P';min-width:120px;
+  }
+
+  .submit-row{display:flex;justify-content:center;padding:12px}
+  .submit-btn{
+    padding:10px 18px;background:#ffcc00;color:#0a0a1a;border:3px solid var(--neon);
+    font-family:'Press Start 2P';text-transform:uppercase;font-size:12px;cursor:pointer;
+    box-shadow:2px 2px 0 #000, inset 0 0 6px #fff;transition:transform .15s,box-shadow .15s;
+  }
+  .submit-btn:hover{transform:scale(1.05)}
+
+  .player-nav {
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:8px;
+    padding:12px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .player-btn{
+    padding:8px 6px;background:#11112a;color:var(--accent);border:3px solid var(--neon);
+    font-family:'Press Start 2P';font-size:11px;text-transform:uppercase;cursor:pointer;
+    box-shadow:2px 2px 0 #000; text-align:center;
+  }
+  .player-btn:hover{transform:scale(1.02)}
+
+  .player-btn.active-Bill{background:#ffd60a;color:#0a0a1a;border-color:#ffd60a}
+  .player-btn.active-Crosbo{background:#00ffff;color:#0a0a1a;border-color:#00ffff}
+  .player-btn.active-Ingz{background:#ff4da6;color:#0a0a1a;border-color:#ff4da6}
+  .player-btn.active-Kabz{background:#7cfc00;color:#0a0a1a;border-color:#7cfc00}
+  .player-btn.active-Kit{background:#ff8c00;color:#0a0a1a;border-color:#ff8c00}
+  .player-btn.active-Locky{background:#8a2be2;color:#0a0a1a;border-color:#8a2be2}
+  .player-btn.active-Stoobs{background:#00bfff;color:#0a0a1a;border-color:#00bfff}
+  .player-btn.active-T-City{background:#ff0066;color:#0a0a1a;border-color:#ff0066}
+
+  .players-wrap{padding:20px 12px}
+  .players-container{
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    padding-bottom:20px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .player-section{
+    flex:0 0 92%;
+    min-width:320px;
+    background:var(--panel);
+    border:3px solid var(--neon);
+    border-radius:10px;
+    padding:14px;
+    color:var(--accent);
+    overflow:hidden;
+    box-sizing:border-box;
+  }
+  .player-section h2{margin:0 0 8px 0;font-size:18px}
+  .player-section h3{margin:8px 0;font-size:12px}
+
+  .fixtures{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+  .fixture-row{display:flex;gap:8px}
+  .fixture-tile{
+    flex:1;
+    padding:8px;
+    font-size:11px;
+    background:var(--panel-2);
+    border:2px solid var(--neon);
+    border-radius:6px;
+    text-align:center;
+    cursor:pointer;
+    transition:background .12s, transform .12s;
+    word-break:break-word;
+  }
+  .fixture-tile:hover{transform:translateY(-3px)}
+  .fixture-tile.picked{background:#555;color:#aaaa;border-color:#888}
+
+  .player-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:10px;table-layout:fixed}
+  .player-table th,.player-table td{border:1px solid var(--neon);padding:6px;text-align:center;overflow-wrap:break-word}
+  .player-table th{background:#11112a;color:var(--neon);font-size:10}
+  .player-table tr:nth-child(even){background:#1b1b3a}
+  .player-table tr:nth-child(odd){background:#2a2a4c}
+  .player-table td{max-width:1px}
+
+  @media (max-width:720px){
+    h1{font-size:36px}
+    .player-section{flex:0 0 94%}
+    .player-nav{grid-template-columns:repeat(4,1fr);gap:6px;padding:10px}
+    .fixture-tile{font-size:10px;padding:6px}
+  }
 </style>
 </head>
 <body>
@@ -40,109 +127,179 @@
     <a href="rules.html">Rules</a>
   </nav>
 </header>
+
 <h1>LMS 12</h1>
 
-<div class="question-box">
-  <label for="playerSelect">Player</label>
+<div class="top-questions">
   <select id="playerSelect">
-    <option value="Bill">Bill</option>
-    <option value="Crosbo">Crosbo</option>
-    <option value="Ingz">Ingz</option>
-    <option value="Kabz">Kabz</option>
-    <option value="Kit">Kit</option>
-    <option value="Locky">Locky</option>
-    <option value="Stoobs">Stoobs</option>
-    <option value="T-City">T-City</option>
+    <option disabled selected>Select Player</option>
+    <option>Bill</option><option>Crosbo</option><option>Ingz</option><option>Kabz</option>
+    <option>Kit</option><option>Locky</option><option>Stoobs</option><option>T-City</option>
   </select>
 
-  <label for="teamSelect">Team</label>
   <select id="teamSelect">
-    <option value="Arsenal">Arsenal</option>
-    <option value="Aston Villa">Aston Villa</option>
-    <option value="Brighton">Brighton</option>
-    <option value="Burnley">Burnley</option>
-    <option value="Chelsea">Chelsea</option>
-    <option value="Crystal Palace">Crystal Palace</option>
-    <option value="Everton">Everton</option>
-    <option value="Fulham">Fulham</option>
-    <option value="Leeds">Leeds</option>
-    <option value="Liverpool">Liverpool</option>
-    <option value="Man City">Man City</option>
-    <option value="Man Utd">Man Utd</option>
-    <option value="Newcastle">Newcastle</option>
-    <option value="Nottingham Forest">Nottingham Forest</option>
-    <option value="Tottenham Hotspur">Tottenham Hotspur</option>
-    <option value="Sunderland">Sunderland</option>
-    <option value="West Ham">West Ham</option>
-    <option value="Wolverhampton Wanderers">Wolverhampton Wanderers</option>
-    <option value="Bournemouth">Bournemouth</option>
-    <option value="Brentford">Brentford</option>
+    <option disabled selected>Select Team</option>
+    <option>Arsenal</option><option>Aston Villa</option><option>Brentford</option><option>Bournemouth</option>
+    <option>Brighton</option><option>Burnley</option><option>Chelsea</option><option>Everton</option>
+    <option>Fulham</option><option>Leeds</option><option>Liverpool</option><option>Man City</option>
+    <option>Man Utd</option><option>Newcastle</option><option>Nottingham Forest</option><option>Palace</option>
+    <option>Sunderland</option><option>Tottenham Hotspur</option><option>West Ham</option><option>Wolves</option>
   </select>
 
-  <label for="playerPickInput">Player Pick</label>
-  <input type="text" id="playerPickInput" placeholder="Enter Player Name">
+  <input id="playerPick" type="text" placeholder="Player Name">
 </div>
 
-<div class="player-buttons">
-  <button data-player="Bill">Bill</button>
-  <button data-player="Kit">Kit</button>
-  <button data-player="Kabz">Kabz</button>
-  <button data-player="Ingz">Ingz</button>
-  <button data-player="T-City">T-City</button>
-  <button data-player="Locky">Locky</button>
-  <button data-player="Crosbo">Crosbo</button>
-  <button data-player="Stoobs">Stoobs</button>
+<div class="submit-row">
+  <button class="submit-btn" id="submitPickBtn">Submit Pick</button>
 </div>
 
-<!-- Player Sections -->
-<div id="Bill" class="player-section active">
-  <h2>Bill</h2>
-  <div class="fixtures">
-    <div class="fixture-row">
-      <div class="team-tile selected">Man Utd</div>
-      <div class="team-tile">Man City</div>
-    </div>
-    <div class="fixture-row">
-      <div class="team-tile">Chelsea</div>
-      <div class="team-tile">Brentford</div>
-    </div>
-    <div class="fixture-row">
-      <div class="team-tile">Leeds</div>
-      <div class="team-tile">Fulham</div>
-    </div>
-  </div>
-  <table>
-    <tr>
-      <th>Week</th><th>Team pick</th><th>Player pick</th><th>Week total</th>
-    </tr>
-    <tr>
-      <td>1</td><td>—</td><td>—</td><td>0</td>
-    </tr>
-    <tr><td>2</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>3</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>4</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>5</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>6</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>7</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>8</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>9</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>10</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>11</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>12</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>13</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>14</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>15</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>16</td><td>—</td><td>—</td><td>0</td></tr>
-    <tr><td>17</td><td>—</td><td>—</td><td>0</td></tr>
-  </table>
-  <button class="submit-button">Submit Pick</button>
+<div class="player-nav" id="playerNav">
+  <button class="player-btn" data-player="Bill">Bill</button>
+  <button class="player-btn" data-player="Crosbo">Crosbo</button>
+  <button class="player-btn" data-player="Ingz">Ingz</button>
+  <button class="player-btn" data-player="Kabz">Kabz</button>
+  <button class="player-btn" data-player="Kit">Kit</button>
+  <button class="player-btn" data-player="Locky">Locky</button>
+  <button class="player-btn" data-player="Stoobs">Stoobs</button>
+  <button class="player-btn" data-player="T-City">T-City</button>
 </div>
 
-<!-- Repeat for the other 7 players -->
-<div id="Kit" class="player-section"><h2>Kit</h2><div class="fixtures"><div class="fixture-row"><div class="team-tile">Man Utd</div><div class="team-tile">Man City</div></div></div><table><tr><th>Week</th><th>Team pick</th><th>Player pick</th><th>Week total</th></tr><tr><td>1</td><td>—</td><td>—</td><td>0</td></tr></table><button class="submit-button">Submit Pick</button></div>
-<div id="Kabz" class="player-section"><h2>Kabz</h2><div class="fixtures"><div class="fixture-row"><div class="team-tile">Man Utd</div><div class="team-tile">Man City</div></div></div><table><tr><th>Week</th><th>Team pick</th><th>Player pick</th><th>Week total</th></tr><tr><td>1</td><td>—</td><td>—</td><td>0</td></tr></table><button class="submit-button">Submit Pick</button></div>
-<div id="Ingz" class="player-section"><h2>Ingz</h2><div class="fixtures"><div class="fixture-row"><div class="team-tile">Man Utd</div><div class="team-tile">Man City</div></div></div><table><tr><th>Week</th><th>Team pick</th><th>Player pick</th><th>Week total</th></tr><tr><td>1</td><td>—</td><td>—</td><td>0</td></tr></table><button class="submit-button">Submit Pick</button></div>
-<div id="T-City" class="player-section"><h2>T-City</h2><div class="fixtures"><div class="fixture-row"><div class="team-tile">Man Utd</div><div class="team-tile">Man City</div></div></div><table><tr><th>Week</th><th>Team pick</th><th>Player pick</th><th>Week total</th></tr><tr><td>1</td><td>—</td><td>—</td><td>0</td></tr></table><button class="submit-button">Submit Pick</button></div>
-<div id="Locky" class="player-section"><h2>Locky</h2><div class="fixtures"><div class="fixture-row"><div class="team-tile">Man Utd</div><div class="team-tile">Man City</div></div></div><table><tr><th>Week</th><th>Team pick</th><th>Player pick</th><th>Week total</th></tr><tr><td>1</td><td>—</td><td>—</td><td>0</td></tr></table><button class="submit-button">Submit Pick</button></div>
-<div id="Crosbo" class="player-section"><h2>Crosbo</h2><div class="fixtures"><div class="fixture-row"><div class="team-tile">Man Utd</div><div class="team-tile">Man City</div></div></div><table><tr><th>Week</th><th>Team pick</th><th>Player pick</th><th>Week total</th></tr><tr><td>1</td><td>—</td><td>—</td><td>0</td></tr></table><button class="submit-button">Submit Pick</button></div>
-<div id="Stoobs" class="player-section"><h2>Stoobs</h2><div class="fixtures"><div class="fixture-row"><div class="team-tile">Man Utd</div><div class="team-tile">Man City</div></div></div><t
+<div class="players-wrap">
+  <div class="players-container" id="playersContainer"></div>
+</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbw3qUBdG4Yz0552cmAE1CjQLo7rqysOx0UHrQ3CBlGgCKfokdiBSa_253GSSXat62og/exec";
+const playerNames = ["Bill","Crosbo","Ingz","Kabz","Kit","Locky","Stoobs","T-City"];
+const fixturesList = [
+  ["Man Utd","Man City"],["Chelsea","Brentford"],["Leeds","Fulham"],
+  ["Liverpool","Burnley"],["Sunderland","Palace"],["Tottenham Hotspur","West Ham"],
+  ["Nottingham Forest","Arsenal"],["Wolves","Newcastle"],["Aston Villa","Everton"],
+  ["Brighton","Bournemouth"]
+];
+
+const playersContainer = document.getElementById('playersContainer');
+const playerNav = document.getElementById('playerNav');
+
+function buildPlayerSections(){
+  playerNames.forEach(name=>{
+    const sec = document.createElement('section');
+    sec.className='player-section';
+    sec.id=name;
+
+    const title=document.createElement('h2');title.textContent=name;sec.appendChild(title);
+    sec.appendChild(Object.assign(document.createElement('h3'),{textContent:"Fixtures - Next Gameweek"}));
+
+    const fixturesDiv=document.createElement('div');fixturesDiv.className='fixtures';
+    fixturesList.forEach(pair=>{
+      const row=document.createElement('div');row.className='fixture-row';
+      pair.forEach(team=>{
+        const tile=document.createElement('div');tile.className='fixture-tile';tile.textContent=team;
+        tile.addEventListener('click',()=>tile.classList.toggle('picked'));
+        row.appendChild(tile);
+      });
+      fixturesDiv.appendChild(row);
+    });
+    sec.appendChild(fixturesDiv);
+
+    const h=document.createElement('h3');h.textContent="YOU HAVE PICKED THESE PLAYERS — YOU ARE NOT PERMITTED TO PICK THEM AGAIN";sec.appendChild(h);
+    const p=document.createElement('p');p.textContent="No players picked yet";sec.appendChild(p);
+
+    const table=document.createElement('table');table.className='player-table';
+    const headerRow=document.createElement('tr');
+    headerRow.innerHTML=`<th>Week</th><th>Team</th><th>Team Pts</th><th>Player Pick</th><th>Player Pts</th><th>Week Total</th>`;
+    table.appendChild(headerRow);
+    for(let i=1;i<=17;i++){
+      const r=document.createElement('tr');
+      r.innerHTML=`<td>${i}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>`;
+      table.appendChild(r);
+    }
+    sec.appendChild(table);
+
+    playersContainer.appendChild(sec);
+  });
+}
+
+function initPlayerNav(){
+  const navButtons=[...document.querySelectorAll('.player-btn')];
+  function clear(){
+    navButtons.forEach(b=>{
+      playerNames.forEach(n=>b.classList.remove('active-'+n));
+      b.classList.remove('active');
+    });
+  }
+
+  navButtons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      clear();
+      const player=btn.dataset.player;
+      btn.classList.add('active');btn.classList.add('active-'+player);
+      const section=document.getElementById(player);
+      const contRect=playersContainer.getBoundingClientRect();
+      const secRect=section.getBoundingClientRect();
+      const offset=secRect.left - contRect.left + playersContainer.scrollLeft;
+      playersContainer.scrollTo({left:offset,behavior:'smooth'});
+    });
+  });
+
+  let ticking=false;
+  playersContainer.addEventListener('scroll',()=>{
+    if(ticking) return;
+    ticking=true;
+    requestAnimationFrame(()=>{
+      const scroll=playersContainer.scrollLeft;
+      const sections=[...playersContainer.querySelectorAll('.player-section')];
+      let closest=0,min=999999;
+      sections.forEach((sec,i)=>{
+        const d=Math.abs(sec.offsetLeft - scroll);
+        if(d<min){min=d;closest=i;}
+      });
+      clear();
+      const name=playerNames[closest];
+      const btn=navButtons.find(b=>b.dataset.player===name);
+      if(btn){btn.classList.add('active');btn.classList.add('active-'+name);}
+      ticking=false;
+    });
+  });
+}
+
+async function submitPickToSheet(data){
+  return fetch(SHEET_URL,{
+    method:'POST',
+    body:JSON.stringify(data),
+    headers:{'Content-Type':'application/json'}
+  }).then(r=>r.json());
+}
+
+document.getElementById('submitPickBtn').addEventListener('click',async()=>{
+  const player=document.getElementById('playerSelect').value;
+  const team=document.getElementById('teamSelect').value;
+  const playerPick=document.getElementById('playerPick').value.trim();
+
+  if(!player || !team || !playerPick){
+    alert("Please complete Player, Team and Player Name.");
+    return;
+  }
+
+  const payload={player,team,playerPick};
+
+  try{
+    const result=await submitPickToSheet(payload);
+    if(result.status==="success"){
+      alert("Pick submitted!");
+      document.getElementById('playerSelect').value="";
+      document.getElementById('teamSelect').value="";
+      document.getElementById('playerPick').value="";
+    } else {
+      alert("Submission failed."); console.log(result);
+    }
+  }catch(e){
+    alert("Error submitting.");
+  }
+});
+
+buildPlayerSections();
+setTimeout(initPlayerNav,120);
+</script>
+</body>
+</html>
