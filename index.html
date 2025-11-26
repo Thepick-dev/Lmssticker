@@ -3,134 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Football Arcade League</title>
+<title>LMS 12</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
   body {
-    margin: 0;
-    font-family: 'Press Start 2P', monospace;
-    background: #0a0a1a;
-    color: #fff;
+    margin:0;
+    background:#0a0a1a;
+    font-family: 'Press Start 2P', cursive;
+    color:#ffd60a;
+    overflow-x:hidden;
   }
-  nav {
-    background: #14213d;
-    padding: 16px 0;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  header {
+    position:sticky;
+    top:0;
+    background:#11112a;
+    padding:1rem 0;
+    text-align:center;
+    z-index:1000;
   }
   nav a {
-    color: #e5e5ff;
-    text-decoration: none;
-    margin: 0 20px;
-    font-size: 14px;
-    transition: color 0.2s, text-shadow 0.2s;
+    display:inline-block;
+    margin:0 1rem;
+    color:#ffd60a;
+    text-decoration:none;
+    text-transform:uppercase;
+    transition: 0.3s;
   }
   nav a:hover {
-    color: #ffd60a;
-    text-shadow: 0 0 8px #ffd60a;
+    color:#00ffff;
+    text-shadow:0 0 10px #00ffff;
+  }
+  h1 {
+    font-size:60px;
+    text-align:center;
+    margin-top:2rem;
+    color:#ffd60a;
+    text-shadow:0 0 10px #ffd60a;
+  }
+  .tagline {
+    font-size:18px;
+    text-align:center;
+    margin-top:1rem;
+    color:#00ffff;
   }
   .hero {
-    height: 75vh;
-    background: radial-gradient(circle at center, #2a2a4c, #0a0a1a);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    margin-top:3rem;
+    animation: shimmer 3s infinite;
   }
-  .hero h1 {
-    font-size: 48px;
-    color: #ffd60a;
-    text-shadow: 2px 2px #1b1b3a;
-    margin: 0 0 20px 0;
+  @keyframes shimmer {
+    0% { text-shadow: 0 0 5px #ffd60a; }
+    50% { text-shadow: 0 0 20px #ffd60a; }
+    100% { text-shadow: 0 0 5px #ffd60a; }
   }
-  .hero p {
-    font-size: 16px;
-    color: #c5c5ff;
-    margin-bottom: 40px;
-    max-width: 600px;
+  .cta {
+    margin-top:2rem;
+    padding:1rem 2rem;
+    border:2px solid #00ffff;
+    color:#00ffff;
+    text-transform:uppercase;
+    font-size:14px;
+    cursor:pointer;
+    transition:0.3s;
+    animation: pulse 2s infinite;
   }
-  .buttons {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+  .cta:hover {
+    color:#ffd60a;
+    border-color:#ffd60a;
+    text-shadow:0 0 10px #ffd60a;
   }
-  .buttons a {
-    background: #3d3d6b;
-    color: #e5e5ff;
-    padding: 12px 24px;
-    border: 2px solid #ffc300;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 12px;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .buttons a:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 10px #ffd60a;
-  }
-  .stickers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
-    justify-content: center;
-    padding: 40px 0;
-  }
-  .sticker {
-    width: 140px;
-    height: 180px;
-    background: #1b1b3a;
-    border: 3px solid #ffc300;
-    border-radius: 8px;
-    box-shadow: 4px 4px 12px rgba(0,0,0,0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #e5e5ff;
-    font-size: 48px;
-    transition: transform 0.2s;
-  }
-  .sticker:hover {
-    transform: rotate(-8deg) scale(1.15);
-  }
-  footer {
-    text-align: center;
-    padding: 20px 0;
-    font-size: 10px;
-    color: #777;
+  @keyframes pulse {
+    0% { box-shadow:0 0 5px #00ffff; }
+    50% { box-shadow:0 0 20px #00ffff; }
+    100% { box-shadow:0 0 5px #00ffff; }
   }
 </style>
 </head>
 <body>
+<header>
   <nav>
-    <a href="index.html">HOME</a>
-    <a href="predict.html">PREDICT</a>
-    <a href="table.html">TABLE</a>
-    <a href="rules.html">RULES</a>
+    <a href="index.html">Home</a>
+    <a href="predict.html">Predict</a>
+    <a href="table.html">Table</a>
+    <a href="rules.html">Rules</a>
   </nav>
-
-  <div class="hero">
-    <h1>FOOTBALL ARCADE LEAGUE</h1>
-    <p>Relive the golden era of 90s football games. Predict matches, track players, and fight for the top spot!</p>
-    <div class="buttons">
-      <a href="predict.html">PREDICT NOW</a>
-      <a href="table.html">VIEW TABLE</a>
-      <a href="rules.html">SEE RULES</a>
-    </div>
-  </div>
-
-  <div class="stickers">
-    <div class="sticker">⚽</div>
-    <div class="sticker">🥅</div>
-    <div class="sticker">👟</div>
-    <div class="sticker">🏆</div>
-    <div class="sticker">🎯</div>
-    <div class="sticker">🥇</div>
-  </div>
-
-  <footer>© 1995–2025 Football Arcade League</footer>
+</header>
+<h1>LMS 12</h1>
+<div class="tagline">Let's be havin' you!</div>
+<div class="hero">
+  <button class="cta">Start Predicting!</button>
+</div>
 </body>
 </html>
