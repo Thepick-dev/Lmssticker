@@ -13,7 +13,8 @@
     --neon:#00ffff;
     --accent:#ffd60a;
   }
-  html,body{height:100%;margin:0;background:var(--bg);font-family:'Press Start 2P',cursive;color:var(--accent);-webkit-font-smoothing:antialiased}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:'Press Start 2P',cursive;color:var(--accent);-webkit-font-smoothing:antialiased;box-sizing:border-box}
+  *,*::before,*::after{box-sizing:inherit}
   header{
     position:sticky;top:0;z-index:1000;
     background:#11112a;padding:12px 0;text-align:center;
@@ -23,11 +24,13 @@
   nav a{color:var(--accent);text-decoration:none;text-transform:uppercase;font-size:14px;white-space:nowrap;transition:0.22s}
   nav a:hover{color:var(--neon);text-shadow:0 0 10px var(--neon)}
   h1{font-size:48px;margin:14px 0;color:var(--accent);text-align:center;text-shadow:0 0 10px var(--accent)}
+
   .top-questions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:6px 12px}
   .top-questions select,.top-questions input{
     padding:8px 10px;font-size:11px;background:#11112a;border:3px solid var(--neon);color:var(--accent);
-    text-transform:uppercase;font-family:'Press Start 2P';min-width:140px;
+    text-transform:uppercase;font-family:'Press Start 2P';min-width:120px;
   }
+
   .submit-row{display:flex;justify-content:center;padding:12px}
   .submit-btn{
     padding:10px 18px;background:#ffcc00;color:#0a0a1a;border:3px solid var(--neon);
@@ -36,7 +39,6 @@
   }
   .submit-btn:hover{transform:scale(1.05)}
 
-  /* Player nav: two rows of 4 */
   .player-nav {
     display:grid;
     grid-template-columns:repeat(4, minmax(0,1fr));
@@ -51,7 +53,7 @@
     box-shadow:2px 2px 0 #000; text-align:center;
   }
   .player-btn:hover{transform:scale(1.02)}
-  /* active classes per player (unique neon-ish colours) */
+
   .player-btn.active-Bill{background:#ffd60a;color:#0a0a1a;border-color:#ffd60a}
   .player-btn.active-Crosbo{background:#00ffff;color:#0a0a1a;border-color:#00ffff}
   .player-btn.active-Ingz{background:#ff4da6;color:#0a0a1a;border-color:#ff4da6}
@@ -61,38 +63,56 @@
   .player-btn.active-Stoobs{background:#00bfff;color:#0a0a1a;border-color:#00bfff}
   .player-btn.active-T-City{background:#ff0066;color:#0a0a1a;border-color:#ff0066}
 
-  /* players container (horizontal scroll of full-width panels) */
-  .players-container{display:flex;gap:20px;overflow-x:auto;scroll-behavior:smooth;padding:20px}
+  .players-wrap{padding:20px 12px}
+  .players-container{
+    display:flex;
+    gap:20px;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    padding-bottom:20px;
+    -webkit-overflow-scrolling:touch;
+  }
   .player-section{
-    flex:0 0 92%;min-width:320px;
-    background:var(--panel);border:3px solid var(--neon);border-radius:10px;padding:14px;
+    flex:0 0 92%;
+    min-width:320px;
+    background:var(--panel);
+    border:3px solid var(--neon);
+    border-radius:10px;
+    padding:14px;
     color:var(--accent);
+    overflow:hidden;
+    box-sizing:border-box;
   }
   .player-section h2{margin:0 0 8px 0;font-size:18px}
   .player-section h3{margin:8px 0;font-size:12px}
 
-  /* fixtures: each row has two tiles - one tile per team */
   .fixtures{display:flex;flex-direction:column;gap:8px;margin:8px 0}
   .fixture-row{display:flex;gap:8px}
   .fixture-tile{
-    flex:1;padding:8px;font-size:11px;background:var(--panel-2);border:2px solid var(--neon);
-    border-radius:6px;text-align:center;cursor:pointer;transition:background .12s, transform .12s;
+    flex:1;
+    padding:8px;
+    font-size:11px;
+    background:var(--panel-2);
+    border:2px solid var(--neon);
+    border-radius:6px;
+    text-align:center;
+    cursor:pointer;
+    transition:background .12s, transform .12s;
+    word-break:break-word;
   }
   .fixture-tile:hover{transform:translateY(-3px)}
   .fixture-tile.picked{background:#555;color:#aaaa;border-color:#888}
 
-  /* player table compact */
-  .player-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:10px}
-  .player-table th,.player-table td{border:1px solid var(--neon);padding:6px;text-align:center}
+  .player-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:10px;table-layout:fixed}
+  .player-table th,.player-table td{border:1px solid var(--neon);padding:6px;text-align:center;overflow-wrap:break-word}
   .player-table th{background:#11112a;color:var(--neon);font-size:10px}
   .player-table tr:nth-child(even){background:#1b1b3a}
   .player-table tr:nth-child(odd){background:#2a2a4c}
+  .player-table td{max-width:1px}
 
-  /* responsive tweaks */
   @media (max-width:720px){
     h1{font-size:36px}
     .player-section{flex:0 0 94%}
-    .top-questions select{min-width:120px}
     .player-nav{grid-template-columns:repeat(4,1fr);gap:6px;padding:10px}
     .fixture-tile{font-size:10px;padding:6px}
   }
@@ -110,53 +130,29 @@
 
 <h1>LMS 12</h1>
 
-<!-- Top form to submit to Google Sheet -->
 <div class="top-questions">
   <select id="playerSelect">
     <option disabled selected>Select Player</option>
-    <option>Bill</option>
-    <option>Crosbo</option>
-    <option>Ingz</option>
-    <option>Kabz</option>
-    <option>Kit</option>
-    <option>Locky</option>
-    <option>Stoobs</option>
-    <option>T-City</option>
+    <option>Bill</option><option>Crosbo</option><option>Ingz</option><option>Kabz</option>
+    <option>Kit</option><option>Locky</option><option>Stoobs</option><option>T-City</option>
   </select>
 
   <select id="teamSelect">
     <option disabled selected>Select Team</option>
-    <option>Arsenal</option>
-    <option>Aston Villa</option>
-    <option>Brentford</option>
-    <option>Bournemouth</option>
-    <option>Brighton</option>
-    <option>Burnley</option>
-    <option>Chelsea</option>
-    <option>Everton</option>
-    <option>Fulham</option>
-    <option>Leeds</option>
-    <option>Liverpool</option>
-    <option>Man City</option>
-    <option>Man Utd</option>
-    <option>Newcastle</option>
-    <option>Nottingham Forest</option>
-    <option>Palace</option>
-    <option>Sunderland</option>
-    <option>Tottenham Hotspur</option>
-    <option>West Ham</option>
-    <option>Wolves</option>
+    <option>Arsenal</option><option>Aston Villa</option><option>Brentford</option><option>Bournemouth</option>
+    <option>Brighton</option><option>Burnley</option><option>Chelsea</option><option>Everton</option>
+    <option>Fulham</option><option>Leeds</option><option>Liverpool</option><option>Man City</option>
+    <option>Man Utd</option><option>Newcastle</option><option>Nottingham Forest</option><option>Palace</option>
+    <option>Sunderland</option><option>Tottenham Hotspur</option><option>West Ham</option><option>Wolves</option>
   </select>
 
   <input id="playerPick" type="text" placeholder="Player Name">
-  <input id="weekInput" type="number" placeholder="Week Number" min="1" max="17" style="width:110px">
 </div>
 
 <div class="submit-row">
   <button class="submit-btn" id="submitPickBtn">Submit Pick</button>
 </div>
 
-<!-- Player navigation (2 rows of 4 due to grid layout) -->
 <div class="player-nav" id="playerNav">
   <button class="player-btn" data-player="Bill">Bill</button>
   <button class="player-btn" data-player="Crosbo">Crosbo</button>
@@ -168,81 +164,54 @@
   <button class="player-btn" data-player="T-City">T-City</button>
 </div>
 
-<!-- Players container: horizontal scroll of player panels -->
-<div class="players-container" id="playersContainer">
-  <!-- JavaScript will generate the 8 player sections here -->
+<div class="players-wrap">
+  <div class="players-container" id="playersContainer"></div>
 </div>
 
 <script>
-/* --------------------------
-   Configuration & constants
-   -------------------------- */
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxrbFjCbLFFUpaMkvvwamK9-G-YXDu1WjutP-dZ_9b5X8Sa0RXThyeoYEcXLvRcG92G/exec";
-
-/* players and fixtures (strict mode values) */
 const playerNames = ["Bill","Crosbo","Ingz","Kabz","Kit","Locky","Stoobs","T-City"];
 const fixturesList = [
-  ["Man Utd","Man City"],
-  ["Chelsea","Brentford"],
-  ["Leeds","Fulham"],
-  ["Liverpool","Burnley"],
-  ["Sunderland","Palace"],
-  ["Tottenham Hotspur","West Ham"],
-  ["Nottingham Forest","Arsenal"],
-  ["Wolves","Newcastle"],
-  ["Aston Villa","Everton"],
+  ["Man Utd","Man City"],["Chelsea","Brentford"],["Leeds","Fulham"],
+  ["Liverpool","Burnley"],["Sunderland","Palace"],["Tottenham Hotspur","West Ham"],
+  ["Nottingham Forest","Arsenal"],["Wolves","Newcastle"],["Aston Villa","Everton"],
   ["Brighton","Bournemouth"]
 ];
 
 const playersContainer = document.getElementById('playersContainer');
 const playerNav = document.getElementById('playerNav');
 
-/* --------------------------
-   Build player sections
-   -------------------------- */
 function buildPlayerSections(){
   playerNames.forEach(name=>{
     const sec = document.createElement('section');
-    sec.className = 'player-section';
-    sec.id = name;
+    sec.className='player-section';
+    sec.id=name;
 
-    // Header
-    const title = document.createElement('h2'); title.textContent = name;
-    sec.appendChild(title);
-    sec.appendChild(Object.assign(document.createElement('h3'),{textContent:'Fixtures - Next Gameweek'}));
+    const title=document.createElement('h2');title.textContent=name;sec.appendChild(title);
+    sec.appendChild(Object.assign(document.createElement('h3'),{textContent:"Fixtures - Next Gameweek"}));
 
-    // Fixtures
-    const fixturesDiv = document.createElement('div'); fixturesDiv.className='fixtures';
+    const fixturesDiv=document.createElement('div');fixturesDiv.className='fixtures';
     fixturesList.forEach(pair=>{
-      const row = document.createElement('div'); row.className='fixture-row';
+      const row=document.createElement('div');row.className='fixture-row';
       pair.forEach(team=>{
-        const tile = document.createElement('div');
-        tile.className = 'fixture-tile';
-        tile.textContent = team;
-        // toggle picked for demonstration/future use
-        tile.addEventListener('click', ()=> {
-          tile.classList.toggle('picked');
-        });
+        const tile=document.createElement('div');tile.className='fixture-tile';tile.textContent=team;
+        tile.addEventListener('click',()=>tile.classList.toggle('picked'));
         row.appendChild(tile);
       });
       fixturesDiv.appendChild(row);
     });
     sec.appendChild(fixturesDiv);
 
-    // Picked players placeholder
-    const pickedHeading = document.createElement('h3'); pickedHeading.textContent = 'YOU HAVE PICKED THESE PLAYERS — YOU ARE NOT PERMITTED TO PICK THEM AGAIN';
-    sec.appendChild(pickedHeading);
-    const pickedPara = document.createElement('p'); pickedPara.textContent = 'No players picked yet';
-    sec.appendChild(pickedPara);
+    const h=document.createElement('h3');h.textContent="YOU HAVE PICKED THESE PLAYERS — YOU ARE NOT PERMITTED TO PICK THEM AGAIN";sec.appendChild(h);
+    const p=document.createElement('p');p.textContent="No players picked yet";sec.appendChild(p);
 
-    // Player table (17 rows empty)
-    const table = document.createElement('table'); table.className='player-table';
-    const headerRow = document.createElement('tr');
-    headerRow.innerHTML = `<th>Week</th><th>Team</th><th>Team Pts</th><th>Player Pick</th><th>Player Pts</th><th>Week Total</th>`;
+    const table=document.createElement('table');table.className='player-table';
+    const headerRow=document.createElement('tr');
+    headerRow.innerHTML=`<th>Week</th><th>Team</th><th>Team Pts</th><th>Player Pick</th><th>Player Pts</th><th>Week Total</th>`;
     table.appendChild(headerRow);
     for(let i=1;i<=17;i++){
-      const r = document.createElement('tr');
-      r.innerHTML = `<td>${i}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>`;
+      const r=document.createElement('tr');
+      r.innerHTML=`<td>${i}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>`;
       table.appendChild(r);
     }
     sec.appendChild(table);
@@ -251,121 +220,86 @@ function buildPlayerSections(){
   });
 }
 
-/* --------------------------
-   Player nav interaction
-   -------------------------- */
 function initPlayerNav(){
-  const navButtons = Array.from(document.querySelectorAll('.player-btn'));
-  function clearActiveClasses(){
+  const navButtons=[...document.querySelectorAll('.player-btn')];
+  function clear(){
     navButtons.forEach(b=>{
-      // remove all player specific active classes
       playerNames.forEach(n=>b.classList.remove('active-'+n));
       b.classList.remove('active');
     });
   }
 
   navButtons.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      // highlight
-      clearActiveClasses();
-      const player = btn.dataset.player;
-      btn.classList.add('active');
-      btn.classList.add('active-'+player);
-      // scroll to section top, accounting for header height
-      const section = document.getElementById(player);
-      if(section){
-        const headerHeight = document.querySelector('header').offsetHeight;
-        const rect = section.getBoundingClientRect();
-        const target = window.pageYOffset + rect.top - headerHeight - 8; // small gap
-        window.scrollTo({top: target, behavior:'smooth'});
-      }
+    btn.addEventListener('click',()=>{
+      clear();
+      const player=btn.dataset.player;
+      btn.classList.add('active');btn.classList.add('active-'+player);
+      const section=document.getElementById(player);
+      const contRect=playersContainer.getBoundingClientRect();
+      const secRect=section.getBoundingClientRect();
+      const offset=secRect.left - contRect.left + playersContainer.scrollLeft;
+      playersContainer.scrollTo({left:offset,behavior:'smooth'});
     });
   });
 
-  // IntersectionObserver: set active based on which section is near top
-  const options = {
-    root: null,
-    rootMargin: '-20% 0px -60% 0px', // tuned so section entering view triggers
-    threshold: 0
-  };
-  const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        const id = entry.target.id;
-        clearActiveClasses();
-        const btn = navButtons.find(b=>b.dataset.player===id);
-        if(btn){
-          btn.classList.add('active');
-          btn.classList.add('active-'+id);
-          // ensure button visible in nav (optional), scroll into view horizontally
-          btn.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-        }
-      }
+  let ticking=false;
+  playersContainer.addEventListener('scroll',()=>{
+    if(ticking) return;
+    ticking=true;
+    requestAnimationFrame(()=>{
+      const scroll=playersContainer.scrollLeft;
+      const sections=[...playersContainer.querySelectorAll('.player-section')];
+      let closest=0,min=999999;
+      sections.forEach((sec,i)=>{
+        const d=Math.abs(sec.offsetLeft - scroll);
+        if(d<min){min=d;closest=i;}
+      });
+      clear();
+      const name=playerNames[closest];
+      const btn=navButtons.find(b=>b.dataset.player===name);
+      if(btn){btn.classList.add('active');btn.classList.add('active-'+name);}
+      ticking=false;
     });
-  }, options);
-
-  // observe each player section
-  playerNames.forEach(n=>{
-    const el = document.getElementById(n);
-    if(el) observer.observe(el);
   });
 }
 
-/* --------------------------
-   Submit pick (to Google Sheet)
-   -------------------------- */
 async function submitPickToSheet(data){
-  try{
-    const res = await fetch(SHEET_URL, {
-      method:'POST',
-      body: JSON.stringify(data),
-      headers: {'Content-Type':'application/json'}
-    });
-    return await res.json();
-  }catch(err){
-    console.error('Submit error',err);
-    throw err;
-  }
+  return fetch(SHEET_URL,{
+    method:'POST',
+    body:JSON.stringify(data),
+    headers:{'Content-Type':'application/json'}
+  }).then(r=>r.json());
 }
 
-document.getElementById('submitPickBtn').addEventListener('click', async ()=>{
-  const player = document.getElementById('playerSelect').value;
-  const team = document.getElementById('teamSelect').value;
-  const playerPick = document.getElementById('playerPick').value.trim();
-  const week = document.getElementById('weekInput').value;
+document.getElementById('submitPickBtn').addEventListener('click',async()=>{
+  const player=document.getElementById('playerSelect').value;
+  const team=document.getElementById('teamSelect').value;
+  const playerPick=document.getElementById('playerPick').value.trim();
 
-  if(!player || !team || !playerPick || !week){
-    alert('Please complete Player, Team, Player name and Week.');
+  if(!player || !team || !playerPick){
+    alert("Please complete Player, Team and Player Name.");
     return;
   }
 
-  const payload = {week, player, team, playerPick};
+  const payload={player,team,playerPick};
 
   try{
-    const result = await submitPickToSheet(payload);
-    if(result && result.status === 'success'){
-      alert('Pick submitted!');
-      // clear form
-      document.getElementById('playerSelect').value = '';
-      document.getElementById('teamSelect').value = '';
-      document.getElementById('playerPick').value = '';
-      document.getElementById('weekInput').value = '';
+    const result=await submitPickToSheet(payload);
+    if(result.status==="success"){
+      alert("Pick submitted!");
+      document.getElementById('playerSelect').value="";
+      document.getElementById('teamSelect').value="";
+      document.getElementById('playerPick').value="";
     } else {
-      alert('Submission failed. See console for details.');
-      console.error(result);
+      alert("Submission failed."); console.log(result);
     }
-  } catch(e){
-    alert('Network / script error. Check console.');
+  }catch(e){
+    alert("Error submitting.");
   }
 });
 
-/* --------------------------
-   Initialization
-   -------------------------- */
 buildPlayerSections();
-// Wait a tick so sections exist in DOM then init nav observer & handlers
-setTimeout(initPlayerNav, 120);
-
+setTimeout(initPlayerNav,120);
 </script>
 </body>
 </html>
