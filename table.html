@@ -3,96 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Table – Football Arcade League</title>
+<title>LMS 12 - Table</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin:0;
-    font-family:'Press Start 2P', monospace;
-    background: #0a0a1a;
-    color: #fff;
-  }
-  nav {
-    background: #14213d;
-    padding: 16px 0;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  nav a {
-    color: #e5e5ff;
-    text-decoration: none;
-    margin: 0 20px;
-    font-size: 14px;
-    transition: color 0.2s, text-shadow 0.2s;
-  }
-  nav a:hover {
-    color: #ffd60a;
-    text-shadow: 0 0 8px #ffd60a;
-  }
-  h1 {
-    text-align: center;
-    margin: 24px 0 16px 0;
-    font-size: 28px;
-    color: #ffd60a;
-    text-shadow: 2px 2px #1b1b3a;
-  }
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 10px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #1b1b3a;
-    border: 3px solid #ffc300;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 4px 4px 12px rgba(0,0,0,0.7);
-  }
-  th, td {
-    padding: 12px;
-    text-align: left;
-    font-size: 12px;
-    color: #e5e5ff;
-    border-bottom: 1px solid #264066;
-  }
-  th {
-    background: #264066;
-    color: #ffd60a;
-  }
-  tr:hover td {
-    background: rgba(255,214,0,0.1);
-  }
+  body {margin:0; background:#0a0a1a; font-family:'Press Start 2P', cursive; color:#ffd60a;}
+  header {position:sticky; top:0; background:#11112a; padding:1rem 0; text-align:center; z-index:1000;}
+  nav a {display:inline-block; margin:0 1rem; color:#ffd60a; text-decoration:none; text-transform:uppercase; transition:0.3s;}
+  nav a:hover {color:#00ffff; text-shadow:0 0 10px #00ffff;}
+  h1 {font-size:56px; text-align:center; margin:1rem 0; color:#ffd60a; text-shadow:0 0 10px #ffd60a;}
+  table {width:90%; margin:2rem auto; border-collapse:collapse; font-size:12px;}
+  th, td {border:1px solid #00ffff; padding:8px; text-align:center;}
+  th {background:#11112a; color:#00ffff;}
+  tr:nth-child(even) {background:#1b1b3a;}
+  tr:nth-child(odd) {background:#2a2a4c;}
+  tr:hover {background:#00ffff; color:#0a0a1a; cursor:pointer; transition:0.3s;}
 </style>
 </head>
 <body>
+<header>
   <nav>
-    <a href="index.html">HOME</a>
-    <a href="predict.html">PREDICT</a>
-    <a href="table.html">TABLE</a>
-    <a href="rules.html">RULES</a>
+    <a href="index.html">Home</a>
+    <a href="predict.html">Predict</a>
+    <a href="table.html">Table</a>
+    <a href="rules.html">Rules</a>
   </nav>
-  <h1>LEAGUE TABLE</h1>
-  <div class="container">
-    <table>
-      <thead>
-        <tr>
-          <th>Team</th><th>Pts</th><th>P</th><th>W</th><th>D</th><th>L</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Manchester United</td><td>100</td><td>10</td><td>9</td><td>1</td><td>0</td></tr>
-        <tr><td>Manchester City</td><td>95</td><td>10</td><td>8</td><td>1</td><td>1</td></tr>
-        <tr><td>Liverpool</td><td>90</td><td>10</td><td>7</td><td>2</td><td>1</td></tr>
-        <tr><td>Chelsea</td><td>75</td><td>10</td><td>5</td><td>0</td><td>5</td></tr>
-        <tr><td>Arsenal</td><td>60</td><td>10</td><td>4</td><td>0</td><td>6</td></tr>
-      </tbody>
-    </table>
-  </div>
+</header>
+<h1>LMS 12</h1>
+
+<table>
+  <tr>
+    <th>Player</th>
+    <th>Total Points</th>
+  </tr>
+  <tr><td>Billy</td><td>0</td></tr>
+  <tr><td>Player2</td><td>0</td></tr>
+  <tr><td>Player3</td><td>0</td></tr>
+  <tr><td>Player4</td><td>0</td></tr>
+  <tr><td>Player5</td><td>0</td></tr>
+  <tr><td>Player6</td><td>0</td></tr>
+  <tr><td>Player7</td><td>0</td></tr>
+  <tr><td>Player8</td><td>0</td></tr>
+</table>
+
 </body>
 </html>
