@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predict – Football Arcade League</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin:0;
+    font-family:'Press Start 2P', monospace;
+    background: #0a0a1a;
+    color: #fff;
+  }
+  nav {
+    background: #14213d;
+    padding: 16px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav a {
+    color: #e5e5ff;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 14px;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  nav a:hover {
+    color: #ffd60a;
+    text-shadow: 0 0 8px #ffd60a;
+  }
+  h1 {
+    text-align: center;
+    margin: 24px 0;
+    font-size: 32px;
+    color: #ffd60a;
+    text-shadow: 2px 2px #1b1b3a;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  .player-area {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 0;
+    scroll-behavior: smooth;
+  }
+  .player-card {
+    flex: 0 0 260px;
+    background: #1b1b3a;
+    border: 3px solid #ffc300;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.7);
+    min-height: 360px;
+    transition: transform 0.2s;
+  }
+  .player-card:hover {
+    transform: scale(1.05);
+  }
+  .player-card h2 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #ffd60a;
+  }
+  .player-card small {
+    display: block;
+    margin-bottom: 12px;
+    color: #e5e5ff;
+  }
+  .card-section {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .card-section strong {
+    color: #ffd60a;
+  }
+  details {
+    margin-top: 8px;
+    background: #264066;
+    padding: 6px 8px;
+    border: 2px solid #ffc300;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  details summary {
+    outline: none;
+  }
+  details ul {
+    margin: 8px 0 0 12px;
+    padding: 0;
+    list-style: none;
+  }
+  details ul li {
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #e5e5ff;
+  }
+</style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="predict.html">PREDICT</a>
+    <a href="table.html">TABLE</a>
+    <a href="rules.html">RULES</a>
+  </nav>
+
+  <h1>PREDICT SCORES</h1>
+  <div class="container">
+    <div class="player-area" id="player-area"></div>
+  </div>
+
+  <script>
+    const players=[
+      {id:'p1',name:'Billy',team:'Manchester United'},
+      {id:'p2',name:'Sam',team:'Manchester City'},
+      {id:'p3',name:'Zoe',team:'Liverpool'}
+    ];
+    const fixtures=[
+      {id:'f1',home:'Manchester United',away:'Liverpool',date:'2025-11-29',score:'2-1',scorers:[
+         {name:'Rashford',team:'Manchester United',goals:2,assists:['Bruno']},
+         {name:'Salah',team:'Liverpool',goals:1,assists:[]}
+      ]},
+      {id:'f2',home:'Chelsea',away:'Arsenal',date:'2025-11-30',score:'0-0',scorers:[]},
+      {id:'f3',home:'Tottenham',away:'Everton',date:'2025-12-01',score:'3-0',scorers:[
+         {name:'Kane',team:'Tottenham',goals:3,assists:['Hojlund']}
+      ]}
+    ];
+
+    function calcPoints(player){
+      let total=0, details = [];
+      fixtures.forEach(f=>{
+        f.scorers.forEach(s=>{
+          if(s.team === player.team){
+            const g = (s.goals || 0)*30;
+            const a = (s.assists ? s.assists.length : 0)*15;
+            if(g) details.push(`${f.home} vs ${f.away}: ${s.goals} goal(s) +${g}`);
+            if(a) details.push(`${f.home} vs ${f.away}: ${s.assists.length} assist(s) +${a}`);
+            total += g + a;
+          }
+        });
+      });
+      return { total, details };
+    }
+
+    function renderPlayers(){
+      const container = document.getElementById('player-area');
+      players.forEach(p=>{
+        const { total, details } = calcPoints(p);
+        const card = document.createElement('div');
+        card.className = 'player-card';
+        let fixtureList = fixtures.map(f=>`<li>${f.home} vs ${f.away} (${f.score})</li>`).join('');
+        card.innerHTML = `
+          <h2>${p.name}</h2>
+          <small>${p.team}</small>
+          <div class="card-section"><strong>Total Points:</strong> ${total}</div>
+          ${details.length>0 ? `<details><summary>Gameweek</summary><ul>${details.map(d=>`<li>${d}</li>`).join('')}</ul></details>` : ''}
+          <details style="margin-top:8px;"><summary>Fixtures</summary><ul>${fixtureList}</ul></details>
+        `;
+        container.appendChild(card);
+      });
+    }
+    renderPlayers();
+  </script>
+</body>
+</html>
