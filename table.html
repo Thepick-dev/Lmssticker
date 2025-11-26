@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table – Football Arcade League</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin:0;
+    font-family:'Press Start 2P', monospace;
+    background: #0a0a1a;
+    color: #fff;
+  }
+  nav {
+    background: #14213d;
+    padding: 16px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav a {
+    color: #e5e5ff;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 14px;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  nav a:hover {
+    color: #ffd60a;
+    text-shadow: 0 0 8px #ffd60a;
+  }
+  h1 {
+    text-align: center;
+    margin: 24px 0 16px 0;
+    font-size: 28px;
+    color: #ffd60a;
+    text-shadow: 2px 2px #1b1b3a;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #1b1b3a;
+    border: 3px solid #ffc300;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.7);
+  }
+  th, td {
+    padding: 12px;
+    text-align: left;
+    font-size: 12px;
+    color: #e5e5ff;
+    border-bottom: 1px solid #264066;
+  }
+  th {
+    background: #264066;
+    color: #ffd60a;
+  }
+  tr:hover td {
+    background: rgba(255,214,0,0.1);
+  }
+</style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="predict.html">PREDICT</a>
+    <a href="table.html">TABLE</a>
+    <a href="rules.html">RULES</a>
+  </nav>
+  <h1>LEAGUE TABLE</h1>
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>Team</th><th>Pts</th><th>P</th><th>W</th><th>D</th><th>L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Manchester United</td><td>100</td><td>10</td><td>9</td><td>1</td><td>0</td></tr>
+        <tr><td>Manchester City</td><td>95</td><td>10</td><td>8</td><td>1</td><td>1</td></tr>
+        <tr><td>Liverpool</td><td>90</td><td>10</td><td>7</td><td>2</td><td>1</td></tr>
+        <tr><td>Chelsea</td><td>75</td><td>10</td><td>5</td><td>0</td><td>5</td></tr>
+        <tr><td>Arsenal</td><td>60</td><td>10</td><td>4</td><td>0</td><td>6</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
