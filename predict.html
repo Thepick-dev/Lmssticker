@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LMS 12 - Predict</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#0a0a1a; --panel:#1b1b3a; --panel-2:#2a2a4c; --neon:#00ffff; --accent:#ffd60a; }
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);font-family:'Press Start 2P',cursive;color:var(--accent);-webkit-font-smoothing:antialiased}
+header{position:sticky;top:0;z-index:1000;background:#11112a;padding:12px 0;text-align:center;border-bottom:3px solid rgba(0,255,255,0.03)}
+/* nav compressed spacing, keep pixel box active */
+nav{display:flex;justify-content:space-evenly;align-items:center;gap:8px;overflow-x:auto;padding:0 8px}
+nav a{color:var(--accent);text-decoration:none;text-transform:uppercase;white-space:nowrap;font-size:14px;padding:6px 10px}
+nav a.active{ background:var(--accent); color:#0a0a1a; border:3px solid var(--neon); padding:10px 14px; box-shadow:4px 4px 0 #000, inset 0 0 6px #fff; border-radius:4px; }
+
+h1{font-size:48px;margin:14px 0;color:var(--accent);text-align:center;text-shadow:0 0 10px var(--accent)}
+
+/* Top questions: uniform width; placeholders updated to short versions */
+.top-questions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:6px 12px}
+.top-questions select,.top-questions input{flex:0 0 220px;min-width:160px;padding:8px 10px;font-size:11px;background:#11112a;border:3px solid var(--neon);color:var(--accent);text-transform:uppercase;font-family:'Press Start 2P'}
+
+/* mobile stack */
+@media (max-width:720px){
+  .top-questions{flex-direction:column;align-items:center;}
+  .top-questions select, .top-questions input { width:84%; min-width:unset; }
+}
+
+/* submit button kept retro */
+.submit-row{display:flex;justify-content:center;padding:12px}
+.submit-btn{padding:10px 18px;background:#ffcc00;color:#0a0a1a;border:3px solid var(--neon);font-family:'Press Start 2P';text-transform:uppercase;font-size:12px;cursor:pointer;box-shadow:2px 2px 0 #000, inset 0 0 6px #fff;}
+
+/* player nav (2 rows of 4) */
+.player-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;max-width:1100px;margin:0 auto}
+.player-btn{padding:8px;background:#11112a;color:var(--accent);border:3px solid var(--neon);font-family:'Press Start 2P';font-size:11px;text-transform:uppercase;cursor:pointer;box-shadow:2px 2px 0 #000;text-align:center}
+.player-btn.active-Bill{background:#ffd60a;color:#0a0a1a;border-color:#ffd60a}
+.player-btn.active-Crosbo{background:#00ffff;color:#0a0a1a;border-color:#00ffff}
+.player-btn.active-Ingz{background:#ff4da6;color:#0a0a1a;border-color:#ff4da6}
+.player-btn.active-Kabz{background:#7cfc00;color:#0a0a1a;border-color:#7cfc00}
+.player-btn.active-Kit{background:#ff8c00;color:#0a0a1a;border-color:#ff8c00}
+.player-btn.active-Locky{background:#8a2be2;color:#0a0a1a;border-color:#8a2be2}
+.player-btn.active-Stoobs{background:#00bfff;color:#0a0a1a;border-color:#00bfff}
+.player-btn.active-T-City{background:#ff0066;color:#0a0a1a;border-color:#ff0066}
+
+/* players container & sections */
+.players-wrap{padding:20px 12px}
+.players-container{display:flex;gap:20px;overflow-x:auto;scroll-behavior:smooth;padding-bottom:20px;-webkit-overflow-scrolling:touch}
+.player-section{flex:0 0 92%;min-width:320px;background:var(--panel);border:3px solid var(--neon);border-radius:10px;padding:14px;color:var(--accent);overflow:hidden}
+.player-section h2{margin:0 0 8px 0;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.player-section h3{margin:8px 0;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* --- Bill sprite container (inline SVG) --- */
+.mascot-inline { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.mascot-inline img, .mascot-inline svg { width:40px; height:40px; image-rendering:pixelated; display:block; }
+
+/* fixtures */
+.fixtures{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.fixture-row{display:flex;gap:8px}
+.fixture-tile{flex:1;padding:8px;font-size:11px;background:var(--panel-2);border:2px solid var(--neon);border-radius:6px;text-align:center;cursor:pointer;transition:background .12s, transform .12s;word-break:break-word}
+.fixture-tile:hover{transform:translateY(-3px)}
+.fixture-tile.picked{background:#555;color:#aaaa;border-color:#888}
+
+/* player table: shorten headers to avoid splits, plus small-screen font reduction */
+.player-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:11px;table-layout:fixed}
+.player-table th,.player-table td{border:1px solid var(--neon);padding:6px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player-table th{background:#11112a;color:var(--neon);font-size:10px}
+.player-table tr:nth-child(even){background:#1b1b3a}
+.player-table tr:nth-child(odd){background:#2a2a4c}
+.player-table td{word-break:break-word}
+
+/* toast banner */
+#toast { position:fixed;left:50%;transform:translateX(-50%);top:18px;z-index:9999;padding:12px 18px;border-radius:6px;font-family:'Press Start 2P';display:none;color:#0a0a1a;background:#ffd60a;border:3px solid var(--neon);box-shadow:4px 4px 0 #000; }
+#toast.error{background:#ff4d4d;color:#fff;border-color:#ff8c8c}
+
+/* tiny screen adjustments */
+@media (max-width:480px){
+  nav{gap:6px;padding:0 6px} /* compress nav */
+  h1{font-size:36px}
+  .player-table th{font-size:9px} /* smaller header font so text doesn't split */
+  .top-questions select,.top-questions input{flex:0 0 84%;min-width:unset}
+}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="predict.html" class="active">Predict</a>
+    <a href="table.html">Table</a>
+    <a href="rules.html">Rules</a>
+  </nav>
+</header>
+
+<h1>LMS 12</h1>
+
+<div class="top-questions">
+  <!-- placeholders shortened to remove the word "Select" -->
+  <select id="playerSelect">
+    <option disabled selected>Player</option>
+    <option>Bill</option><option>Crosbo</option><option>Ingz</option><option>Kabz</option>
+    <option>Kit</option><option>Locky</option><option>Stoobs</option><option>T-City</option>
+  </select>
+
+  <select id="teamSelect">
+    <option disabled selected>Team</option>
+    <option>Arsenal</option><option>Aston Villa</option><option>Bournemouth</option><option>Brentford</option>
+    <option>Brighton</option><option>Burnley</option><option>Chelsea</option><option>Everton</option>
+    <option>Fulham</option><option>Forest</option><option>Leeds</option><option>Liverpool</option>
+    <option>Man City</option><option>Man Utd</option><option>Newcastle</option><option>Palace</option>
+    <option>Sunderland</option><option>Tottenham</option><option>West Ham</option><option>Wolves</option>
+  </select>
+
+  <input id="playerPick" type="text" placeholder="Player Name" />
+</div>
+
+<div class="submit-row">
+  <button class="submit-btn" id="submitPickBtn">Submit Pick</button>
+</div>
+
+<!-- Toast area -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div class="player-nav" id="playerNav">
+  <button class="player-btn" data-player="Bill">Bill</button>
+  <button class="player-btn" data-player="Crosbo">Crosbo</button>
+  <button class="player-btn" data-player="Ingz">Ingz</button>
+  <button class="player-btn" data-player="Kabz">Kabz</button>
+  <button class="player-btn" data-player="Kit">Kit</button>
+  <button class="player-btn" data-player="Locky">Locky</button>
+  <button class="player-btn" data-player="Stoobs">Stoobs</button>
+  <button class="player-btn" data-player="T-City">T-City</button>
+</div>
+
+<div class="players-wrap">
+  <div class="players-container" id="playersContainer"></div>
+</div>
+
+<script>
+'use strict';
+
+const SHEET_URL = "https://api.sheetbest.com/sheets/8cb5d444-88c4-40de-b023-2cadfd96bff2";
+const playerNames = ["Bill","Crosbo","Ingz","Kabz","Kit","Locky","Stoobs","T-City"];
+const fixturesList = [
+  ["Man Utd","Man City"],["Chelsea","Brentford"],["Leeds","Fulham"],
+  ["Liverpool","Burnley"],["Sunderland","Palace"],["Tottenham","West Ham"],
+  ["Forest","Arsenal"],["Wolves","Newcastle"],["Aston Villa","Everton"],
+  ["Brighton","Bournemouth"]
+];
+
+const playersContainer = document.getElementById('playersContainer');
+const toast = document.getElementById('toast');
+
+function showToast(message, type = 'ok', ms = 2000){
+  toast.textContent = message;
+  toast.className = (type === 'error') ? 'error' : '';
+  toast.style.display = 'block';
+  setTimeout(()=>{ toast.style.display = 'none'; }, ms);
+}
+
+function buildPlayerSections(){
+  playersContainer.innerHTML = ''; // clear existing (safe to re-run)
+  playerNames.forEach(name=>{
+    const sec = document.createElement('section');
+    sec.className='player-section';
+    sec.id=name;
+
+    // If Bill, insert inline PNG-equivalent sprite (embedded SVG) + name; otherwise regular h2
+    if(name === 'Bill'){
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mascot-inline';
+
+      // Inline SVG sprite (pixel-art German Shepherd - compact)
+      const svgHTML = `
+        <svg viewBox="0 0 16 16" width="40" height="40" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="16" height="16" fill="transparent"/>
+          <!-- simplified pixel blocks -->
+          <g shape-rendering="crispEdges">
+            <rect x="3" y="0" width="2" height="1" fill="#1b1b1b"/>
+            <rect x="6" y="0" width="2" height="1" fill="#1b1b1b"/>
+            <rect x="2" y="1" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="3" y="1" width="1" height="1" fill="#ffd46a"/>
+            <rect x="4" y="1" width="1" height="1" fill="#ffd46a"/>
+            <rect x="5" y="1" width="1" height="1" fill="#7a3a14"/>
+            <rect x="9" y="1" width="1" height="1" fill="#7a3a14"/>
+            <rect x="10" y="1" width="1" height="1" fill="#ffd46a"/>
+            <rect x="1" y="2" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="2" y="2" width="1" height="1" fill="#ffd46a"/>
+            <rect x="3" y="2" width="1" height="1" fill="#ffb347"/>
+            <rect x="4" y="2" width="1" height="1" fill="#7a3a14"/>
+            <rect x="5" y="2" width="1" height="1" fill="#7a3a14"/>
+            <rect x="6" y="2" width="1" height="1" fill="#ffb347"/>
+            <rect x="7" y="2" width="1" height="1" fill="#ffd46a"/>
+            <rect x="8" y="2" width="1" height="1" fill="#ffb347"/>
+            <rect x="9" y="2" width="1" height="1" fill="#ffd46a"/>
+            <rect x="10" y="2" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="2" y="3" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="3" y="3" width="1" height="1" fill="#ffd46a"/>
+            <rect x="4" y="3" width="1" height="1" fill="#7a3a14"/>
+            <rect x="5" y="3" width="1" height="1" fill="#000000"/>
+            <rect x="6" y="3" width="1" height="1" fill="#000000"/>
+            <rect x="7" y="3" width="1" height="1" fill="#7a3a14"/>
+            <rect x="8" y="3" width="1" height="1" fill="#ffb347"/>
+            <rect x="9" y="3" width="1" height="1" fill="#7a3a14"/>
+            <rect x="10" y="3" width="1" height="1" fill="#ffd46a"/>
+            <rect x="3" y="4" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="4" y="4" width="1" height="1" fill="#ffd46a"/>
+            <rect x="5" y="4" width="1" height="1" fill="#000000"/>
+            <rect x="6" y="4" width="1" height="1" fill="#000000"/>
+            <rect x="7" y="4" width="1" height="1" fill="#000000"/>
+            <rect x="8" y="4" width="1" height="1" fill="#7a3a14"/>
+            <rect x="9" y="4" width="1" height="1" fill="#7a3a14"/>
+            <rect x="10" y="4" width="1" height="1" fill="#ffd46a"/>
+            <rect x="4" y="5" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="5" y="5" width="1" height="1" fill="#8b5a2b"/>
+            <rect x="6" y="5" width="1" height="1" fill="#ffd46a"/>
+            <rect x="7" y="5" width="1" height="1" fill="#ffd46a"/>
+            <rect x="8" y="5" width="1" height="1" fill="#ffd46a"/>
+            <rect x="9" y="5" width="1" height="1" fill="#8b5a2b"/>
+            <rect x="4" y="6" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="5" y="6" width="1" height="1" fill="#ffd46a"/>
+            <rect x="6" y="6" width="1" height="1" fill="#ffd46a"/>
+            <rect x="7" y="6" width="1" height="1" fill="#ffd46a"/>
+            <rect x="8" y="6" width="1" height="1" fill="#ffd46a"/>
+            <rect x="5" y="7" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="6" y="7" width="1" height="1" fill="#ffd46a"/>
+            <rect x="7" y="7" width="1" height="1" fill="#ffd46a"/>
+            <rect x="8" y="7" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="6" y="8" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="7" y="8" width="1" height="1" fill="#ffd46a"/>
+            <rect x="8" y="8" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="6" y="9" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="7" y="9" width="1" height="1" fill="#7a3a14"/>
+            <rect x="8" y="9" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="5" y="10" width="1" height="1" fill="#1b1b1b"/>
+            <rect x="6" y="10" width="1" height="1" fill="#7a3a14"/>
+            <rect x="7" y="10" width="1" height="1" fill="#7a3a14"/>
+            <rect x="8" y="10" width="1" height="1" fill="#1b1b1b"/>
+            <!-- eye highlight -->
+            <rect x="6" y="3" width="1" height="1" fill="#cfefff"/>
+          </g>
+        </svg>
+      `;
+      wrapper.innerHTML = svgHTML;
+
+      const nameEl = document.createElement('div');
+      nameEl.style.fontSize = '16px';
+      nameEl.style.lineHeight = '1';
+      nameEl.textContent = name;
+      wrapper.appendChild(nameEl);
+
+      sec.appendChild(wrapper);
+    } else {
+      const title = document.createElement('h2'); title.textContent = name; sec.appendChild(title);
+    }
+
+    sec.appendChild(Object.assign(document.createElement('h3'),{textContent:"Fixtures - Next Gameweek"}));
+
+    const fixturesDiv = document.createElement('div'); fixturesDiv.className='fixtures';
+    fixturesList.forEach(pair=>{
+      const row = document.createElement('div'); row.className='fixture-row';
+      pair.forEach(team=>{
+        const tile = document.createElement('div'); tile.className='fixture-tile'; tile.textContent = team;
+        tile.addEventListener('click', ()=> tile.classList.toggle('picked'));
+        row.appendChild(tile);
+      });
+      fixturesDiv.appendChild(row);
+    });
+    sec.appendChild(fixturesDiv);
+
+    const h = document.createElement('h3'); h.textContent = "YOU HAVE PICKED THESE PLAYERS — YOU ARE NOT PERMITTED TO PICK THEM AGAIN"; sec.appendChild(h);
+    const p = document.createElement('p'); p.textContent = "No players picked yet"; sec.appendChild(p);
+
+    const table = document.createElement('table'); table.className = 'player-table';
+    const headerRow = document.createElement('tr');
+    /* shortened header labels to avoid wrapping: Player Pick -> Player ; Player Pts -> P Pts */
+    headerRow.innerHTML = `<th>Week</th><th>Team</th><th>Team Pts</th><th>Player</th><th>P Pts</th><th>Week Total</th>`;
+    table.appendChild(headerRow);
+    for(let i=1;i<=17;i++){
+      const r = document.createElement('tr');
+      r.innerHTML = `<td>${i}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>`;
+      table.appendChild(r);
+    }
+    sec.appendChild(table);
+
+    playersContainer.appendChild(sec);
+  });
+}
+
+function initPlayerNav(){
+  const navButtons = [...document.querySelectorAll('.player-btn')];
+  function clear(){
+    navButtons.forEach(b=>{
+      playerNames.forEach(n=>b.classList.remove('active-'+n));
+      b.classList.remove('active');
+    });
+  }
+
+  navButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      clear();
+      const player = btn.dataset.player;
+      btn.classList.add('active'); btn.classList.add('active-'+player);
+      const section = document.getElementById(player);
+      const contRect = playersContainer.getBoundingClientRect();
+      const secRect = section.getBoundingClientRect();
+      const offset = secRect.left - contRect.left + playersContainer.scrollLeft - 8; // small left offset
+      playersContainer.scrollTo({left: offset, behavior: 'smooth'});
+    });
+  });
+
+  let ticking = false;
+  playersContainer.addEventListener('scroll', ()=>{
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(()=>{
+      const scroll = playersContainer.scrollLeft;
+      const sections = [...playersContainer.querySelectorAll('.player-section')];
+      let closest = 0, min = 999999;
+      sections.forEach((sec,i)=>{
+        const d = Math.abs(sec.offsetLeft - scroll);
+        if(d < min){ min = d; closest = i;}
+      });
+      clear();
+      const name = playerNames[closest];
+      const btn = navButtons.find(b=>b.dataset.player===name);
+      if(btn){ btn.classList.add('active'); btn.classList.add('active-'+name); }
+      ticking = false;
+    });
+  });
+}
+
+// Robust error reporting and friendly toast display
+async function submitPickToSheet(data){
+  try {
+    const response = await fetch(SHEET_URL, {
+      method:'POST',
+      body: JSON.stringify(data),
+      headers: {'Content-Type':'application/json'}
+    });
+
+    const text = await response.text();
+    let json;
+    try { json = JSON.parse(text); } catch(e) { throw new Error(`Non-JSON response: ${text}`); }
+
+    if(!response.ok){
+      throw new Error(`HTTP ${response.status}: ${JSON.stringify(json)}`);
+    }
+    return json;
+  } catch(err){
+    throw err;
+  }
+}
+
+document.getElementById('submitPickBtn').addEventListener('click', async ()=>{
+  const player = document.getElementById('playerSelect').value;
+  const team = document.getElementById('teamSelect').value;
+  const playerPick = document.getElementById('playerPick').value.trim();
+
+  if(!player || !team || !playerPick){
+    showToast("Complete Player, Team & Player name", 'error', 2000);
+    return;
+  }
+
+  const payload = { Player: player, Team: team, PlayerPick: playerPick };
+
+  try{
+    const result = await submitPickToSheet(payload);
+    showToast("SUBMITTED ✔", 'ok', 2000);
+    document.getElementById('playerSelect').value = "";
+    document.getElementById('teamSelect').value = "";
+    document.getElementById('playerPick').value = "";
+  } catch(err){
+    showToast("ERROR: " + err.message, 'error', 4000);
+    console.error("Submission error:", err);
+  }
+});
+
+buildPlayerSections();
+setTimeout(initPlayerNav,120);
+</script>
+</body>
+</html>
